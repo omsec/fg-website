@@ -120,5 +120,8 @@
       }
     }
   },
-  "defaultProject": "forza-garage"
+  "defaultProject": "forza-garage",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }

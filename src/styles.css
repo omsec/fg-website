@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* https://www.softaox.info/best-way-to-use-google-fonts-in-your-angular-project/ */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+/* Font Family */
+html, body {
+    font-family: 'Roboto', sans-serif;
+}

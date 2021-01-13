@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {MenuItem} from 'primeng/api';
+import { User } from '../models/user';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'fg-header',
@@ -8,12 +11,18 @@ import {MenuItem} from 'primeng/api';
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] = [];
+  public currentUser!: User // initialisiert vom auth-Service mit empty()
 
-  constructor() { }
+  constructor(
+    private auth: AuthenticationService,
+    private router: Router) {
+    this.auth.currentUser$.subscribe(usr => this.currentUser = usr);
+  }
 
   ngOnInit(): void {
 
     // https://primefaces.org/primeng/showcase/#/menumodel
+    // evtl. eigene Function
     this.items = [
       {
           label: 'Drivatar',
@@ -40,12 +49,17 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Tunes',
         icon: 'pi pi-fw pi-pencil'
-    },
-    {
-      label: 'Designs',
-      icon: 'pi pi-fw pi-pencil'
-  }
+      },
+      {
+        label: 'Designs',
+        icon: 'pi pi-fw pi-pencil'
+      }
     ];
   }
 
+  logout(): void {
+    this.auth.logout().subscribe(
+      () => this.router.navigate(['/home'])
+    );
+  }
 }

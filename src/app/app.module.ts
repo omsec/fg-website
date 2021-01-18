@@ -11,6 +11,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AvatarModule } from 'primeng/avatar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,13 +21,15 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationErrorInterceptor } from './interceptors/authentication-error.interceptor';
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
+import { UserShowComponent } from './user-show/user-show.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    UserShowComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,9 @@ import { AuthenticationInterceptor } from './interceptors/authentication.interce
     InputTextModule,
     ButtonModule,
     DividerModule,
-    MessageModule
+    MessageModule,
+    ProgressSpinnerModule,
+    AvatarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },

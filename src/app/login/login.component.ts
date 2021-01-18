@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
   get frm(): { [key: string]: AbstractControl } { return this.form.controls; }
 
   onSubmit(): void {
-    console.log('fdsfdfdfs')
     this.submitted = true;
 
     // Falls das Formular ungültig ist, abbrechen
@@ -52,13 +51,24 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.frm.username.value, this.frm.password.value)
       .pipe(first()) // nur das erste item im observable stream (falls wiedererwarten mehrere kommen)
       .subscribe(
-        () => {
+        (usr) => {
           // zurück, wo man her kam --> wenn's /login war, dann / da kein param in der route war
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-          this.router.navigate([returnUrl]);
+
+          // add user's id to route if required
+          if (returnUrl == '/users/') {
+            this.router.navigate([returnUrl + usr.id]);
+          } else {
+            this.router.navigate([returnUrl]);
+          }
         },
-        error => {
-          this.error = error // msg im template über ngIf angezeigt, gesetzt vom authError intcp
+        (error) => {
+          // msg im template über ngIf angezeigt
+          if (error.status == 401 || error.status === 403) {
+            this.error = error.error
+          } else {
+            this.error = 'Please try again later'
+          }
           this.loading = false;
           // console.log(error)
         }

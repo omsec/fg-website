@@ -30,7 +30,7 @@ export class AuthenticationErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(catchError(err => {
       //const error = err.error.message || err.statusText; // Kurztext gemäss HTTP-Response Code (z. B. "forbidden")
-      const error = err.error // error msg for use in GUI
+      // const error = err.error // error msg for use in GUI
 
       // do not refresh auth routes
       if (request.url.includes('login') || request.url.includes('refresh')) {
@@ -39,12 +39,12 @@ export class AuthenticationErrorInterceptor implements HttpInterceptor {
           this.authenticationService.logout();
           this.router.navigate(['/login']);
         }
-        return throwError(error);
+        return throwError(err);
       }
 
       // handle unknown other error
       if (err instanceof HttpErrorResponse && err.status !== 401) {
-        return throwError(error);
+        return throwError(err);
       }
 
       // let the server refresh httpOnly-Cookie

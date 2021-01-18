@@ -24,6 +24,9 @@ export class AuthenticationGuard implements CanActivate {
         return true
       }
 
+      // if (route.routeConfig?.path == 'users/:id')
+      // console.log(route);
+
       // noch nicht eingeloggt: zum login
       this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
       return false;

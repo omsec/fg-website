@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment'; // zentrale config
@@ -32,26 +32,33 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  // Keine Fehlerbehandlung an dieser Stelle notwendig - wird in der Komponente (Login) gemacht
   login(username: string, password: string): Observable<User> {
     return this.http.post<UserRaw>(
       `${environment.apiUrl}/login`, { loginName: username, password: password } )
       .pipe(map(userRaw => UserFactory.fromRaw(userRaw)))
       .pipe(map(user => {
-        // client persistence
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-    }));
+          // client persistence
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+          return user;
+          }
+        )
+      );
   }
 
+  // Error Handling zur Sicherheit, falls der Zustand inkonsistent wird (Cookie weg, Current User noch im local storage)
   logout(): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/logout`, { responseType: 'text'})
         // kein resultat von diesem service, aber rückkehr abwarten
-        .pipe(map(() => {
-          localStorage.removeItem('currentUser');
-          this.currentUserSubject.next(UserFactory.empty());
-        }));
+        .pipe(
+          map(() => {
+            localStorage.removeItem('currentUser');
+            this.currentUserSubject.next(UserFactory.empty());}
+          ),
+          catchError(this.errorHandler)
+        );
   }
 
   // ToDO: Error Handling: log-out & set empty User => logout
@@ -65,6 +72,12 @@ export class AuthenticationService {
         this.currentUserSubject.next(user);
         return user;
     }));
+  }
+
+  private errorHandler(error: HttpErrorResponse): Observable<any> {
+    localStorage.removeItem('currentUser');
+    // this.currentUserSubject.next(UserFactory.empty()) // nicht nötig, schon closed (error)
+    return throwError(error)
   }
 
 

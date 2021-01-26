@@ -1,1 +1,17 @@
-<p>course-list works!</p>
+<ng-container *ngIf="courses$ | async as courses; else loading">
+
+  <p *ngIf="courses.length==0">No Data</p>
+
+  <ul *ngFor="let course of courses">
+    <li><a [routerLink]="['routes', course.id]">{{ course.name }}</a></li>
+  </ul>
+
+  <!-- hier wird alles als error behandelt, auch 204-->
+  <p *ngIf="loadingError===true">OOPS something went wrong</p>
+
+</ng-container>
+
+<ng-template #loading>
+  <!-- global css class-->
+  <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+</ng-template>

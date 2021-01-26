@@ -3,16 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 // shared modules
+import { AppSharedModule } from './shared/app-shared.module';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule, MessageService } from 'primeng/api';
-import { MenubarModule } from 'primeng/menubar';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { MessageModule } from 'primeng/message';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { AvatarModule } from 'primeng/avatar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthenticationErrorInterceptor } from './interceptors/authentication-error.interceptor';
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
 import { UserShowComponent } from './user-show/user-show.component';
+import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -35,21 +28,15 @@ import { UserShowComponent } from './user-show/user-show.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    AppSharedModule,
     HttpClientModule,
-    ReactiveFormsModule,
-    SharedModule,
-    MenubarModule,
-    InputTextModule,
-    ButtonModule,
-    DividerModule,
-    MessageModule,
-    ProgressSpinnerModule,
-    AvatarModule
+
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
+    // Reihenfolge 1-2-3 beim Senden und 3-2-1 beim Empfangen; Original Error-Objekt weiterreichen
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
-    [MessageService]
+    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

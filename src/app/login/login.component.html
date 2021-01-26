@@ -14,12 +14,20 @@
                     <div class="p-fluid">
                         <div class="p-field">
                             <label for="username">Username</label>
-                            <input pInputText id="username" type="text" formControlName="username" />
+                            <input
+                              pInputText id="username"
+                              type="text"
+                              formControlName="username"
+                              [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.username.errors }"/>
                             <small *ngIf="submitted && frm.username.errors" class="p-invalid">Username is required</small>
                         </div>
                         <div class="p-field">
                             <label for="password">Password</label>
-                            <input pInputText id="password" type="password" formControlName="password" />
+                            <input
+                              pInputText id="password"
+                              type="password"
+                              formControlName="password"
+                              [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.password.errors }" />
                             <small *ngIf="submitted && frm.password.errors" class="p-invalid">Password is required</small>
                         </div>
                         <p-button

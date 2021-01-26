@@ -1,0 +1,62 @@
+<div class="card content">
+  <h5>Add Route</h5>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-12">
+        <label for="courseName">Route Name</label>
+        <input
+          id="courseName"
+          formControlName="name"
+          type="text" pInputText
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.name.errors }">
+          <small *ngIf="submitted && frm.name.errors" class="p-invalid">Route Name is required</small>
+      </div>
+
+      <div class="p-field p-col-4">
+        <label for="series">Series</label>
+        <p-dropdown
+          inputId="series"
+          formControlName="series"
+          [options]="series.values"
+          optionLabel="textEN"
+          optionValue="lookupValue"
+          optionDisabled="disabled"
+          placeholer="test">
+        </p-dropdown>
+        <small *ngIf="submitted && frm.series.errors" class="p-invalid">Please choose the Series</small>
+      </div>
+
+      <div class="p-field p-col-4">
+        <label for="carClass">Car Class</label>
+        <p-dropdown
+        inputId="carClass"
+          formControlName="carClass"
+          [options]="carClass.values"
+          optionLabel="textEN"
+          optionValue="lookupValue"
+          optionDisabled="disabled"
+          placeholer="test">
+        </p-dropdown>
+      </div>
+
+      <div class="p-field p-col-4">
+        <label for="forzaShare">Sharing Code</label>
+        <p-inputNumber
+          inputId="forzaShare"
+          formControlName="forzaSharing"
+          [min]=100000000
+          [max]=999999999
+          [showButtons]=true>
+        </p-inputNumber>
+      </div>
+    </div>
+
+    <!-- todo: add/edit switch-->
+    <p-button
+      type="submit"
+      label="Add">
+    </p-button>
+  </form>
+</div>
+
+

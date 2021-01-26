@@ -4,7 +4,7 @@ export interface Lookup {
 }
 
 export interface LookupValue {
-  lookupValue: number;
+  lookupValue: number; // | undefined
   disabled: boolean;
   default: boolean;
   indicator: string;

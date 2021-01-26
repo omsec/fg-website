@@ -8,3 +8,7 @@
 html, body {
     font-family: 'Roboto', sans-serif;
 }
+
+.content {
+  padding: 2rem;
+}

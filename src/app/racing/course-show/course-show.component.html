@@ -1,0 +1,18 @@
+<p>course-show works!</p>
+<p>{{courseId}}</p>
+
+<div *ngIf="course; else loading">
+
+  <p>{{course.name}}</p>
+  <p>{{course.seriesText}}</p>
+
+</div>
+
+<ng-template #loading>
+  <p-progressSpinner *ngIf="loadingErr==''; else error" class="content" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+
+  <ng-template #error>
+    <p *ngIf="loadingErr">{{loadingErr}}</p>
+  </ng-template>
+
+</ng-template>

@@ -29,21 +29,19 @@ export class UserShowComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService) {
-      this.userId = this.route.snapshot.params.id; // gemäss app.routing
-      //this.user$ = this.userService.getSingle(this.userId);
-
-      this.user$ = this.userService.getSingle(this.userId)
-        .pipe(
-          catchError(() => { // error
-            this.loadingError = 'somthing went wrong' // error.statusText;
-            return of(UserFactory.empty())
-          })
-        )
-     }
+    private userService: UserService) { }
 
   ngOnInit(): void {
-    return
+    this.userId = this.route.snapshot.params.id; // gemäss app.routing
+    //this.user$ = this.userService.getSingle(this.userId);
+
+    this.user$ = this.userService.getSingle(this.userId)
+      .pipe(
+        catchError(() => { // error
+          this.loadingError = 'somthing went wrong' // error.statusText;
+          return of(UserFactory.empty())
+        })
+      )
   }
 
 }

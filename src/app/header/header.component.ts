@@ -42,6 +42,7 @@ export class HeaderComponent {
           icon: 'pi pi-fw pi-pencil',
           items: [
             {label: 'Routes', icon: 'pi pi-fw pi-trash', routerLink: ['/routes']},
+            {label: 'New Route', icon: 'pi pi-fw pi-trash', routerLink: ['/routes/add']},
             {label: 'Championships', icon: 'pi pi-fw pi-refresh'}
         ]
       },

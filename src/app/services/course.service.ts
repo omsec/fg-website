@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { retry, map, catchError, delay } from 'rxjs/operators';
 
@@ -19,8 +19,40 @@ export class CourseService {
 
   // ToDO: Term auf struct umstellen (das enthält dann auch gameCode)
   // Permissions prüft der Service via Token/Cookie=>Rolle
-  // GET hat kein BODY - daher POST
-  // GET mit OPTIONS: Buch Seite 187
+
+  getAll(searchTerm: string): Observable<CourseListItem[]> {
+    const noData: CourseListItem[] = [];
+
+    // GET hat kein BODY, daher Query Params
+    const params = new HttpParams({
+      fromObject: {
+        // Game
+        search: searchTerm
+      }
+    });
+
+    return this.http.get<CourseListItemRaw[]>(
+      `${environment.apiUrl}/courses`, { params })
+      .pipe(
+        // delay(1000), // test loading/error screen
+        retry(1),
+        map(coursesRaw => {
+          // an empty list is null
+          if (coursesRaw) {
+            return coursesRaw.map(course => CourseListItemFactory.fromRaw(course));
+          } else {
+            return noData;
+          }
+        }),
+        catchError(err => {
+          // console.log(err);
+          return throwError('Please try again later');
+        })
+      );
+  }
+
+  /*
+  // Version für POST
   getAll(searchTerm: string): Observable<CourseListItem[]> {
     const noData: CourseListItem[] = [];
 
@@ -43,6 +75,7 @@ export class CourseService {
         })
       );
   }
+  */
 
   /*
   getAll(searchTerm: string): Observable<CourseListItem[]> {

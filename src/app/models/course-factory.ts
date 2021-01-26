@@ -5,14 +5,10 @@ import { CarClass, CourseType, Game, Series, Visibility } from './lookup-values'
 
 export class CourseFactory {
   static fromRaw(courseRaw: CourseRaw): Course {
-    if (courseRaw) {
       return {
         ...courseRaw,
         metaInfo: MetainfoFactory.fromRaw(courseRaw.metaInfo)
       }
-    } else {
-      throw('null received')
-    }
   }
 
   // für create-notwendige

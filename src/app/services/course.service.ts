@@ -41,7 +41,7 @@ export class CourseService {
           if (coursesRaw) {
             return coursesRaw.map(course => CourseListItemFactory.fromRaw(course));
           } else {
-            return noData;
+            return noData; // empty list ist NOT an error
           }
         }),
         catchError(err => {
@@ -95,10 +95,36 @@ export class CourseService {
       .pipe(
         // delay(1000), // testing loading/error in template :-)
         retry(1),
+        map(courseRaw => {
+          // check for empty result (204)
+          if (courseRaw) {
+            return CourseFactory.fromRaw(courseRaw);
+          } else {
+            throw 'null received' // convert 204 into an error...
+          }
+        }),
+        catchError(err => {
+          if (err == 'null received') {
+            err = 'Route not found' // ...and send a human-readable message to the component
+          } else {
+            err = 'Please try again later'
+          }
+          return throwError(err)
+        })
+      );
+  }
+
+  /*
+  getSingle(courseId: string): Observable<Course> {
+    return this.http.get<CourseRaw>(
+      `${environment.apiUrl}/courses/${courseId}`)
+      .pipe(
+        // delay(1000), // testing loading/error in template :-)
+        retry(1),
         map(courseRaw => CourseFactory.fromRaw(courseRaw)),
         catchError((err) => {
           //console.log(err); // log the actual error, eg. status 0/unknown Error for time-out
-          // report user friendly message (factory null = 204, which was no api error)
+          // "convert" 204/null into an error with human-readable message
           if (err == 'null received') {
             err = 'Route not found'
           } else {
@@ -109,6 +135,7 @@ export class CourseService {
         })
       );
   }
+  */
 
   // may return { id: string } or { api-error }
   // no additional error handliong required - taken care of by api-error interceptor

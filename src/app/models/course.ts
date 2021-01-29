@@ -33,3 +33,10 @@ export interface CourseListItem {
   carClassCode: number;
   carClassText: string;
 }
+
+// not sent to the API directly, it's used inside this app
+// to pass search-criteria to the service which then converts it into http-params
+export interface CourseSearch {
+  gameText: string;
+  searchTerm: string;
+}

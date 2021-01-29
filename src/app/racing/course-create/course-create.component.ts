@@ -17,7 +17,13 @@ export class CourseCreateComponent {
   ) { }
 
   createCourse(course: Course): void {
-    console.log('TEST');
+
+    /* TEST
+    this.courseService.existsForzaShare(100000003).subscribe(
+      exists => console.log(exists),
+      error => console.log(error)
+    );
+    */
 
     this.courseService.add(course).subscribe(
       newCourse => {

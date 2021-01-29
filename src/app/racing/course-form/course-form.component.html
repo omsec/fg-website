@@ -2,7 +2,18 @@
   <h5>Add Route</h5>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="p-fluid p-formgrid p-grid">
-      <div class="p-field p-col-12 p-md-12">
+      <div class="p-field p-col-1">
+        <label for="series">Game</label>
+        <p-dropdown
+          inputId="game"
+          formControlName="game"
+          [options]="game.values"
+          optionLabel="textEN"
+          optionValue="lookupValue"
+          optionDisabled="disabled">
+        </p-dropdown>
+      </div>
+      <div class="p-field p-col-11 p-md-11">
         <label for="courseName">Route Name</label>
         <input
           id="courseName"
@@ -37,6 +48,7 @@
           optionDisabled="disabled"
           placeholer="test">
         </p-dropdown>
+        <small *ngIf="submitted && frm.carClass.errors" class="p-invalid">Please choose the Car Class</small>
       </div>
 
       <div class="p-field p-col-4">
@@ -48,6 +60,8 @@
           [max]=999999999
           [showButtons]=true>
         </p-inputNumber>
+        <small *ngIf="submitted && frm.forzaSharing.errors?.required" class="p-invalid">Forza Share Code is required</small>
+        <small *ngIf="frm.forzaSharing.errors?.shareCodeExists" class="p-invalid">Forza Share Code already exists</small>
       </div>
     </div>
 

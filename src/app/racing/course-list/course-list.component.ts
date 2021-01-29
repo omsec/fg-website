@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { CourseListItem } from 'src/app/models/course';
+import { CourseListItem, CourseSearch } from 'src/app/models/course';
 import { CourseService } from 'src/app/services/course.service';
 
 @Component({
@@ -22,7 +22,11 @@ export class CourseListComponent implements OnInit {
     const noData: CourseListItem[] = [];
 
     // ToDO: Eingabe-Boxen
-    this.courses$ = this.courseService.getAll('')
+
+    this.courses$ = this.courseService.getAll({
+      gameText: 'FH4',
+      searchTerm: ''
+    } as CourseSearch)
     .pipe(
       catchError((err) => { // param falls z. B. str vom service ausgelesen werden soll
         console.log(err)

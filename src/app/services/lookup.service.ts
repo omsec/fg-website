@@ -75,10 +75,16 @@ export class LookupService {
   }
 
   // get default option (for control's initialization)
-  // undefined damit das feld leer gelassen werden kann (bspw. für Placeholder Text)
-  // wenn es keinen Default-Eintrag gibt
-  getDefaultValue(lookup: Lookup): number | undefined {
-    let defaultValue = undefined
+  getDefaultValue(lookup: Lookup): number {
+
+    // leider ist "feld leer lassen" bei den NgPrime-Komponenten nicht vorgesehen (zumindest nicht mit Reactive Forms)
+    // ein Dropdown wird immer mit dem Text des ersten Elements initialisiert. Deshalb wird hier nicht undefinied
+    // zurückgegeben wenn kein Default existiert, sondern das erste Element.
+    let defaultValue = 0
+    if (lookup.values.length > 0) {
+      defaultValue = lookup.values[0].lookupValue;
+    }
+
 
     // map kann nicht abgebrochen werden - darum for
     // prototype "some" würde auch gehen

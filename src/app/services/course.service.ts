@@ -7,7 +7,7 @@ import { retry, map, catchError, delay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 import { CourseListItemRaw, CourseRaw } from '../models/course-raw';
-import { CourseListItem, Course } from '../models/course';
+import { CourseListItem, Course, CourseSearch } from '../models/course';
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
 
 @Injectable({
@@ -20,14 +20,15 @@ export class CourseService {
   // ToDO: Term auf struct umstellen (das enthält dann auch gameCode)
   // Permissions prüft der Service via Token/Cookie=>Rolle
 
-  getAll(searchTerm: string): Observable<CourseListItem[]> {
+  getAll(searchSpecs: CourseSearch): Observable<CourseListItem[]> {
     const noData: CourseListItem[] = [];
 
     // GET hat kein BODY, daher Query Params
+    // http://localhost:3000/courses?game=fh5&search=roger
     const params = new HttpParams({
       fromObject: {
-        // Game
-        search: searchTerm
+        game: searchSpecs.gameText,
+        search: searchSpecs.searchTerm
       }
     });
 
@@ -142,6 +143,11 @@ export class CourseService {
   add(course: Course): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/course/add`, course) // course im Body übergeben
+  }
+
+  existsForzaShare(sharingCode: number): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/course/exists`, { forzaSharing: sharingCode })
+    .pipe(map(response => response.exists === true))
   }
 
 }

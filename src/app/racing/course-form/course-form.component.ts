@@ -8,6 +8,7 @@ import { Lookup } from 'src/app/models/lookup';
 import { LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { LookupService } from 'src/app/services/lookup.service';
+import { ShareCodeExistsValidatorService } from 'src/app/validators/sharecode-exists-validator.service';
 
 @Component({
   selector: 'fg-course-form',
@@ -41,7 +42,8 @@ export class CourseFormComponent implements OnInit {
     private route: ActivatedRoute, // für lookups via Resolver
     private formBuilder: FormBuilder,
     private auth: AuthenticationService,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private shareCodeExistsValidator: ShareCodeExistsValidatorService
   ) { }
 
   ngOnInit(): void {
@@ -63,8 +65,9 @@ export class CourseFormComponent implements OnInit {
     // Formularmodell
     this.form = this.formBuilder.group({
       //visibility: [this.lookupService.getDefaultValue(this.visibility), Validators.required],
-      //game: [this.lookupService.getDefaultValue(this.game), Validators.required],
-      forzaSharing: [100000000, [Validators.required, Validators.min(100000000), Validators.max(999999999)]],
+      game: [this.lookupService.getDefaultValue(this.game), Validators.required],
+      forzaSharing: [null as unknown as number,
+        [Validators.required, Validators.min(100000000), Validators.max(999999999)], [this.shareCodeExistsValidator]],
       name: ['', Validators.required],
       series: [this.lookupService.getDefaultValue(this.series), Validators.required],
       carClass: [this.lookupService.getDefaultValue(this.carClass), Validators.required], // ToDo: Mehrfachauswahlen vorsehen
@@ -78,7 +81,7 @@ export class CourseFormComponent implements OnInit {
   onSubmit(): void {
     this.submitted = true;
 
-    console.log(this.frm.series.value)
+//     console.log(this.frm.series.value)
 
     // Falls das Formular ungültig ist, abbrechen
     if (this.form.invalid) { return; }
@@ -93,7 +96,7 @@ export class CourseFormComponent implements OnInit {
       course.metaInfo.createdID = this.auth.currentUserValue.id
     }
     // visibility
-    // game
+    course.gameCode = this.frm.game.value;
     course.forzaSharing = this.frm.forzaSharing.value;
     course.name = this.frm.name.value;
     course.seriesCode = this.frm.series.value;

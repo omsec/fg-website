@@ -1,12 +1,13 @@
 <div class="card content">
-  <h5>Add Route</h5>
+  <h5 *ngIf="!editing">Add Route</h5>
+  <h5 *ngIf="editing">Modify Route</h5>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-1">
-        <label for="series">Game</label>
+        <label for="game">Game</label>
         <p-dropdown
           inputId="game"
-          formControlName="game"
+          formControlName="gameCode"
           [options]="game.values"
           optionLabel="textEN"
           optionValue="lookupValue"
@@ -27,28 +28,26 @@
         <label for="series">Series</label>
         <p-dropdown
           inputId="series"
-          formControlName="series"
+          formControlName="seriesCode"
           [options]="series.values"
           optionLabel="textEN"
           optionValue="lookupValue"
           optionDisabled="disabled"
           placeholer="test">
         </p-dropdown>
-        <small *ngIf="submitted && frm.series.errors" class="p-invalid">Please choose the Series</small>
       </div>
 
       <div class="p-field p-col-4">
         <label for="carClass">Car Class</label>
         <p-dropdown
         inputId="carClass"
-          formControlName="carClass"
+          formControlName="carClassCode"
           [options]="carClass.values"
           optionLabel="textEN"
           optionValue="lookupValue"
           optionDisabled="disabled"
           placeholer="test">
         </p-dropdown>
-        <small *ngIf="submitted && frm.carClass.errors" class="p-invalid">Please choose the Car Class</small>
       </div>
 
       <div class="p-field p-col-4">
@@ -61,14 +60,32 @@
           [showButtons]=true>
         </p-inputNumber>
         <small *ngIf="submitted && frm.forzaSharing.errors?.required" class="p-invalid">Forza Share Code is required</small>
-        <small *ngIf="frm.forzaSharing.errors?.shareCodeExists" class="p-invalid">Forza Share Code already exists</small>
+        <small *ngIf="!editing && frm.forzaSharing.errors?.shareCodeExists" class="p-invalid">Forza Share Code already exists</small>
+      </div>
+
+      <div class="p-field p-col-4">
+        <label for="sharing">Sharing</label>
+        <p-dropdown
+        inputId="sharing"
+          formControlName="visibilityCode"
+          [options]="visibility.values"
+          optionLabel="textEN"
+          optionValue="lookupValue"
+          optionDisabled="disabled">
+        </p-dropdown>
       </div>
     </div>
 
     <!-- todo: add/edit switch-->
     <p-button
+      *ngIf="!editing"
       type="submit"
       label="Add">
+    </p-button>
+    <p-button
+      *ngIf="editing"
+      type="submit"
+      label="Save">
     </p-button>
   </form>
 </div>

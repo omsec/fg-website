@@ -9,10 +9,11 @@ import { CourseFormComponent } from './course-form/course-form.component';
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { CourseShowComponent } from './course-show/course-show.component';
 import { CourseShow2Component } from './course-show2/course-show2.component';
+import { CourseEditComponent } from './course-edit/course-edit.component';
 
 
 @NgModule({
-  declarations: [CourseListComponent, CourseFormComponent, CourseCreateComponent, CourseShowComponent, CourseShow2Component],
+  declarations: [CourseListComponent, CourseFormComponent, CourseCreateComponent, CourseShowComponent, CourseShow2Component, CourseEditComponent],
   imports: [
     CommonModule,
     RacingRoutingModule,

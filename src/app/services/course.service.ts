@@ -17,9 +17,6 @@ export class CourseService {
 
   constructor(private http: HttpClient) { }
 
-  // ToDO: Term auf struct umstellen (das enthält dann auch gameCode)
-  // Permissions prüft der Service via Token/Cookie=>Rolle
-
   getAll(searchSpecs: CourseSearch): Observable<CourseListItem[]> {
     const noData: CourseListItem[] = [];
 
@@ -31,7 +28,6 @@ export class CourseService {
         search: searchSpecs.searchTerm
       }
     });
-
     return this.http.get<CourseListItemRaw[]>(
       `${environment.apiUrl}/courses`, { params })
       .pipe(
@@ -143,6 +139,14 @@ export class CourseService {
   add(course: Course): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/course/add`, course) // course im Body übergeben
+  }
+
+  update(course: Course): Observable<any> {
+    return this.http.put(
+      `${environment.apiUrl}/course/edit/${course.id}`,
+      course, // course im Body übergeben
+      // { responseType: 'text'} // zerstört error handling!!
+    )
   }
 
   existsForzaShare(sharingCode: number): Observable<boolean> {

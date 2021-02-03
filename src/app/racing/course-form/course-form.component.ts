@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -15,11 +15,11 @@ import { ShareCodeExistsValidatorService } from 'src/app/validators/sharecode-ex
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.css']
 })
-export class CourseFormComponent implements OnInit {
+export class CourseFormComponent implements OnInit, OnChanges {
   // https://stackoverflow.com/questions/54104187/typescript-complain-has-no-initializer-and-is-not-definitely-assigned-in-the-co/54104796
   form!: FormGroup
 
-  @Input() course: Course | undefined; // ToDO: factory.empty
+  @Input() course = CourseFactory.empty();
   @Input() editing = false; // mode (create, edit)
 
   // Event für die Steuerkomponente
@@ -42,36 +42,50 @@ export class CourseFormComponent implements OnInit {
     private route: ActivatedRoute, // für lookups via Resolver
     private formBuilder: FormBuilder,
     private auth: AuthenticationService,
-    private lookupService: LookupService,
-    private shareCodeExistsValidator: ShareCodeExistsValidatorService
+    private lookupService: LookupService
+    // private shareCodeExistsValidator: ShareCodeExistsValidatorService
   ) { }
 
   ngOnInit(): void {
-    // hier platziert vom Resolver
-    this.lookups = this.route.snapshot.data.lookups; // evtl. auch in initForm (UPD)
-
-    this.visibility = this.lookupService.getOptions(this.lookups, LookupTypes.Visibility, false);
-    this.game = this.lookupService.getOptions(this.lookups, LookupTypes.Game, false);
-    this.series = this.lookupService.getOptions(this.lookups, LookupTypes.Series, false);
-    this.carClass = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
-
     this.initForm();
+  }
+
+  // fired when input properties change (happens in edit-mode) - before ngOnInit
+  ngOnChanges(): void {
+    this.initForm();
+    this.setFormValues(this.course);
   }
 
   // damit das Formular für add & edit benutzt werden kann
   private initForm(): void {
     if (this.form) { return; }
 
+    // hier platziert vom Resolver
+    this.lookups = this.route.snapshot.data.lookups;
+
+    this.visibility = this.lookupService.getOptions(this.lookups, LookupTypes.Visibility, false);
+    this.game = this.lookupService.getOptions(this.lookups, LookupTypes.Game, false);
+    this.series = this.lookupService.getOptions(this.lookups, LookupTypes.Series, false);
+    this.carClass = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
+
     // Formularmodell
     this.form = this.formBuilder.group({
-      //visibility: [this.lookupService.getDefaultValue(this.visibility), Validators.required],
-      game: [this.lookupService.getDefaultValue(this.game), Validators.required],
-      forzaSharing: [null as unknown as number,
-        [Validators.required, Validators.min(100000000), Validators.max(999999999)], [this.shareCodeExistsValidator]],
+      visibilityCode: [this.lookupService.getDefaultValue(this.visibility), Validators.required],
+      gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
+      //forzaSharing: [null as unknown as number,
+        //[Validators.required, Validators.min(100000000), Validators.max(999999999)], [this.shareCodeExistsValidator]],
+        forzaSharing: [null as unknown as number, [Validators.required, Validators.min(100000000), Validators.max(999999999)]],
       name: ['', Validators.required],
-      series: [this.lookupService.getDefaultValue(this.series), Validators.required],
-      carClass: [this.lookupService.getDefaultValue(this.carClass), Validators.required], // ToDo: Mehrfachauswahlen vorsehen
+      seriesCode: [this.lookupService.getDefaultValue(this.series), Validators.required],
+      carClassCode: [this.lookupService.getDefaultValue(this.carClass), Validators.required], // ToDo: Mehrfachauswahlen vorsehen
     });
+  }
+
+  // Felder initialisieren (für edit-Modus)
+  private setFormValues(course: Course): void {
+    this.form.patchValue(course);
+    // Felder mit anderem Namen im Formular als im Modell 'manuell' setzen (achtung wenn disabed, siehe Buch)
+
   }
 
   // Hilfsmethode für einfacheren Zugriff auf die Controls
@@ -95,12 +109,12 @@ export class CourseFormComponent implements OnInit {
     } else {
       course.metaInfo.createdID = this.auth.currentUserValue.id
     }
-    // visibility
-    course.gameCode = this.frm.game.value;
+    course.visibilityCode = this.frm.visibilityCode.value;
+    course.gameCode = this.frm.gameCode.value;
     course.forzaSharing = this.frm.forzaSharing.value;
     course.name = this.frm.name.value;
-    course.seriesCode = this.frm.series.value;
-    course.carClassCode = this.frm.carClass.value;
+    course.seriesCode = this.frm.seriesCode.value;
+    course.carClassCode = this.frm.carClassCode.value;
 
     this.submitCourse.emit(course);
   }

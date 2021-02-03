@@ -90,7 +90,7 @@ export class LookupService {
     // prototype "some" würde auch gehen
     // https://stackoverflow.com/questions/12260529/break-statement-in-javascript-array-map-method
 
-    for (let i = 0; i  < lookup.values.length; i++) {
+    for (let i = 0; i < lookup.values.length; i++) {
       if (lookup.values[i].default === true) {
         defaultValue = lookup.values[i].lookupValue;
         break;
@@ -104,6 +104,21 @@ export class LookupService {
     */
 
     return defaultValue;
+  }
+
+  // get the text of a given type/value
+  getText(lookup: Lookup, value: number): string {
+    let str = '';
+
+    // map kann nicht abgebrochen werden, deshalb for
+    for (let i = 0; i < lookup.values.length; i++) {
+      if (lookup.values[i].lookupValue == value) {
+        str = lookup.values[i].textEN;
+        break;
+      }
+    }
+
+    return str;
   }
 
   // Für lokale Fehrlebehandlung (interceptors sind global)

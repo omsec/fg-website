@@ -1,5 +1,40 @@
 <ng-container *ngIf="courses$ | async as courses; else loading">
 
+  <div class="card content">
+    <form [formGroup]="form">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-1">
+          <p-dropdown
+            inputId="game"
+            formControlName="gameCode"
+            [options]="game.values"
+            optionLabel="textEN"
+            optionValue="lookupValue"
+            optionDisabled="disabled">
+          </p-dropdown>
+        </div>
+        <div class="p-field p-col-11 p-md-10">
+          <!-- ToDo: NGprime hat ein Search Control-->
+          <input
+            id="search"
+            formControlName="searchTerm"
+            type="text" pInputText
+            (keyup)="searchHandler()">
+        </div>
+        <div class="p-field p-col-11 p-md-1">
+          <!-- todo: unten/rechts vom searchTerm platzieren, neues div/formgrid?-->
+          <p-button
+            type="button"
+            label="New"
+            [routerLink]="['/routes/add']">
+          </p-button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+
   <p *ngIf="courses.length==0">No Data</p>
 
   <ul *ngFor="let course of courses">

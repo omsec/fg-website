@@ -135,12 +135,13 @@ export class CourseService {
   */
 
   // may return { id: string } or { api-error }
-  // no additional error handliong required - taken care of by api-error interceptor
+  // no additional error handliong required - taken care of by http-error interceptor
   add(course: Course): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/course/add`, course) // course im Body übergeben
   }
 
+  // no additional error handliong required - taken care of by http-error interceptor
   update(course: Course): Observable<any> {
     return this.http.put(
       `${environment.apiUrl}/course/edit/${course.id}`,

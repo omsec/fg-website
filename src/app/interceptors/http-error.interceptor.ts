@@ -38,13 +38,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             // convert errors to human-redable messages
             // msg = `Server Error Code: ${error.status}\nMessage: ${error.message}`;
             if (error.status === 422) {
-              switch ((error.error as ApiError).code) {
-                case 1000:
-                  msg = 'This Forza Share Code is already used' // custom text, func?
-                  break;
-                default:
-                  msg = error.error.msg;
-              }
+              msg = this.formatErrorMessage(error);
+
               // keep error type to not confuse the auth-error interceptor
               error.error.msg = msg;
               return throwError(error)
@@ -56,6 +51,19 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
         })
       );
+  }
+
+  formatErrorMessage(error: any): string {
+    let msg = '';
+
+    switch ((error.error as ApiError).code) {
+      case 1000:
+        msg = 'This Forza Share Code is already used'
+        break;
+      default:
+        msg = error.error.msg;
+    }
+    return msg;
   }
 
 }

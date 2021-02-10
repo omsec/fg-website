@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import {MenuItem} from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { User } from '../models/user';
 import { UserFactory } from '../models/user-factory';
 import { AuthenticationService } from '../services/authentication.service';
@@ -8,15 +10,19 @@ import { AuthenticationService } from '../services/authentication.service';
 @Component({
   selector: 'fg-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
+  providers: [DialogService, MessageService]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
   items: MenuItem[] = [];
   public currentUser!: User // initialisiert vom auth-Service mit empty()
+  ref: DynamicDialogRef | undefined;
 
   constructor(
     private auth: AuthenticationService,
-    private router: Router) {
+    private router: Router,
+    public dialogService: DialogService,
+    public messageService: MessageService) {
     this.auth.currentUser$.subscribe(usr => {
       this.currentUser = usr;
       this.buildMenu(usr)
@@ -34,7 +40,7 @@ export class HeaderComponent {
           label: loginName,
           items: [
               {label: 'Profile', icon: 'pi pi-fw pi-plus', routerLink: ['/users', user.id]} ,
-              {label: 'Change Password', disabled: !loggedIn}
+              {label: 'Change Password', disabled: !loggedIn, command: () => { this.changePassword(); } }
           ]
       },
       {
@@ -74,4 +80,29 @@ export class HeaderComponent {
       }
     );
   }
+
+  changePassword(): void {
+    this.ref = this.dialogService.open(ChangePasswordComponent, {
+      data: {
+        id: '51gF3' // uzerId
+      },
+      header: 'Change Password',
+      width: '30%'
+    });
+
+    this.ref.onClose.subscribe(pwdChanged => {
+      // true | undefined
+      if (pwdChanged) {
+        this.messageService.add({severity: 'info', summary: 'Password changed'});
+      }
+    });
+
+  }
+
+  ngOnDestroy(): void  {
+    if (this.ref) {
+      this.ref.close();
+    }
+  }
+
 }

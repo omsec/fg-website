@@ -1,21 +1,25 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { retry, map, catchError, delay } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { retry, map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
 import { CourseListItemRaw, CourseRaw } from '../models/course-raw';
 import { CourseListItem, Course, CourseSearch } from '../models/course';
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
+import { AuthenticationService } from './authentication.service';
+import { UserRole } from '../models/lookup-values';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authenticationService: AuthenticationService) { }
 
   getAll(searchSpecs: CourseSearch): Observable<CourseListItem[]> {
     const noData: CourseListItem[] = [];
@@ -153,6 +157,19 @@ export class CourseService {
   existsForzaShare(sharingCode: number): Observable<boolean> {
     return this.http.post<any>(`${environment.apiUrl}/course/exists`, { forzaSharing: sharingCode })
     .pipe(map(response => response.exists === true))
+  }
+
+  // toggle controls
+  // method implemented here, since these rules maybe entity-specific
+  canModify(course: Course): boolean {
+    // console.log(this.authenticationService.currentUserValue.roleCode)
+    // console.log(this.authenticationService.currentUserValue.id)
+    // console.log(course.metaInfo.createdID)
+
+    return (
+      (this.authenticationService.currentUserValue.roleCode == UserRole.Admin)
+        || (this.authenticationService.currentUserValue.id == course.metaInfo.createdID)
+    )
   }
 
 }

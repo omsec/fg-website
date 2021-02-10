@@ -12,6 +12,7 @@ export class CourseShowComponent implements OnInit {
   courseId = '';
   course: Course | undefined
   loadingErr = ''; // '' = loading, sonst default TExt
+  canModify = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +23,10 @@ export class CourseShowComponent implements OnInit {
   ngOnInit(): void {
     this.courseId = this.route.snapshot.params.id; // gemäss app.routing
     this.courseService.getSingle(this.courseId).subscribe(
-      res => { this.course = res;},
+      res => {
+        this.course = res;
+        this.canModify = this.courseService.canModify(this.course);
+      },
       errMsg => { this.loadingErr =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
     )
   }

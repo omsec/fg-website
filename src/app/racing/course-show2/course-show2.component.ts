@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Course } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { CourseService } from 'src/app/services/course.service';
@@ -15,6 +15,7 @@ export class CourseShow2Component implements OnInit {
   courseId = '';
   course$: Observable<Course> | undefined;
   loadingErr = '';
+  canModify = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +29,9 @@ export class CourseShow2Component implements OnInit {
 
     this.course$ = this.courseService.getSingle(this.courseId)
       .pipe(
+        tap(course => {
+          this.canModify = this.courseService.canModify(course);
+        }),
         catchError(err => {
           console.log(err);
           this.loadingErr = err;

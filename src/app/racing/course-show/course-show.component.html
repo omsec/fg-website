@@ -1,19 +1,32 @@
-<p>course-show works!</p>
-<p>{{courseId}}</p>
-
 <div *ngIf="course; else loading">
 
   <p>{{course.name}}</p>
   <p>{{course.seriesText}}</p>
+  <p>Created by {{course.metaInfo.createdName}}</p>
+  <p>Created at {{course.metaInfo.createdTS}}</p> <!-- format pipe-->
+
+  <p>can modify: {{canModify}}</p>
 
 </div>
 
 <hr>
+<!-- ist disabled immer noch klickbar -->
+<!-- https://forum.primefaces.org/viewtopic.php?t=59008 -->
+<!--
 <p-button
-type="button"
-label="modify"
-[routerLink]="['/routes/edit', courseId]">
+  type="button"
+  label="modify"
+  [routerLink]="['/routes/edit', courseId]"
+  [disabled]=readOnly>
 </p-button>
+-->
+
+<button
+  pButton
+  label="modify"
+  [routerLink]="['/routes/edit', courseId]"
+  [disabled]=!canModify>
+</button>
 
 <ng-template #loading>
   <p-progressSpinner *ngIf="loadingErr==''; else error" class="content" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>

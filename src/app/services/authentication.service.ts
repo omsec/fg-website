@@ -74,6 +74,21 @@ export class AuthenticationService {
     }));
   }
 
+  // let user re-type their passwords in case of increased security needs
+  verifyPassword(password: string): Observable<boolean> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/user/verifyPass`, { loginName: this.currentUserValue.loginName, password })
+        .pipe(map(response => response.granted));
+  }
+
+  changePassword(oldPassword: string, newPassword: string): Observable<boolean> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/user/changePass`, { loginName: this.currentUserValue.loginName, currentPWD: oldPassword, newPWD: newPassword })
+        .pipe(
+          map(() => true), // hack? ;-) just return obs-true, if everything went right, since the service doesn't return data (status only)
+          catchError(err => {return throwError('Please try again later') }));
+  }
+
   private errorHandler(error: HttpErrorResponse): Observable<any> {
     localStorage.removeItem('currentUser');
     // this.currentUserSubject.next(UserFactory.empty()) // nicht nötig, schon closed (error)

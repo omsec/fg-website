@@ -15,6 +15,7 @@ import { AuthenticationErrorInterceptor } from './interceptors/authentication-er
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
 import { UserShowComponent } from './user-show/user-show.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -22,15 +23,15 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
     HomeComponent,
     HeaderComponent,
     LoginComponent,
-    UserShowComponent
+    UserShowComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
-    HttpClientModule,
-
+    HttpClientModule
   ],
   providers: [
     // Reihenfolge 1-2-3 beim Senden und 3-2-1 beim Empfangen; Original Error-Objekt weiterreichen
@@ -38,6 +39,9 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ChangePasswordComponent
+  ]
 })
 export class AppModule { }

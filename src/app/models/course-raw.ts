@@ -13,8 +13,15 @@ export interface CourseRaw {
   name: string;
   seriesCode: number;
   seriesText?: string;
-  carClassCode: number;
-  carClassText?: string;
+  carClassesCode: number[];
+  carClassesText?: string[];
+  route?: CourseRefRaw;
+}
+
+// nested course reference
+export interface CourseRefRaw {
+  id: string;
+  name: string;
 }
 
 // recuded structure used for lists (read-only to client, hence no nulls)
@@ -30,6 +37,6 @@ export interface CourseListItemRaw {
   forzaSharing: number;
   seriesCode: number;
   seriesText: string;
-  carClassCode: number;
-  carClassText: string;
+  carClassesCode: number[];
+  carClassesText: string[];
 }

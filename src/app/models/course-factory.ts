@@ -1,7 +1,8 @@
 import { CourseRaw, CourseListItemRaw } from './course-raw';
 import { Course, CourseListItem } from './course';
 import { MetainfoFactory } from './metainfo-factory';
-import { CarClass, CourseType, Game, Series, Visibility } from './lookup-values';
+import { CarClass, CourseType, Game, LookupTypes, Series, Visibility } from './lookup-values';
+import { LookupService } from '../services/lookup.service';
 
 export class CourseFactory {
   static fromRaw(courseRaw: CourseRaw): Course {
@@ -12,16 +13,18 @@ export class CourseFactory {
   }
 
   // für create-notwendige
-  static empty(): Course {
+  // ToDO: lookup service injdecten?
+  static empty(lookupService: LookupService): Course {
     return {
       metaInfo: MetainfoFactory.empty(),
-      visibilityCode: Visibility.Public,
-      gameCode: Game.FH4,
-      typeCode: CourseType.Community,
+      visibilityCode: lookupService.getDefault(LookupTypes.Visibility),
+      gameCode: lookupService.getDefault(LookupTypes.Game),
+      typeCode: lookupService.getDefault(LookupTypes.CourseType),
       forzaSharing: 100000000,
       name: '',
-      seriesCode: Series.Road,
-      carClassCode: CarClass.Open
+      seriesCode: lookupService.getDefault(LookupTypes.Series),
+      //carClassesCode: Array.from([lookupService.getDefault(LookupTypes.CarClass)]) // setzt das erste elemente, wenn kein def vorhanden
+      carClassesCode: Array.from([]) // kein def
     }
   }
 

@@ -42,7 +42,8 @@ export class CourseListComponent implements OnInit {
 
     // Eingabe-Boxen (Frrmularmodell)
     this.form = this.formBuilder.group({
-      gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
+      //gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
+      gameCode: [this.lookupService.getDefault(LookupTypes.Game)],
       searchTerm: ['']
     });
 

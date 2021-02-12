@@ -4,7 +4,7 @@ import { from, Observable, of, throwError } from 'rxjs';
 import { retry, map, catchError, shareReplay, concatMap, exhaustMap, mergeMap, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { Lookup } from '../models/lookup';
+import { Lookup, LookupValue } from '../models/lookup';
 import { LookupTypes } from '../models/lookup-values';
 
 @Injectable({
@@ -74,6 +74,28 @@ export class LookupService {
     return options;
   }
 
+  // used in factory's empty()
+  // ToDO: evtl. auch GetDefaults vorsehen (returns array, mit push statt break)
+  getDefault(lookupType: LookupTypes): number {
+    // leider ist "feld leer lassen" bei den NgPrime-Komponenten nicht vorgesehen (zumindest nicht mit Reactive Forms)
+    // ein Dropdown wird immer mit dem Text des ersten Elements initialisiert. Deshalb wird hier nicht undefinied
+    // zurückgegeben wenn kein Default existiert, sondern das erste Element.
+    let defaultValue = 0;
+
+    for (let i = 0; i < this.lookups.length; i++) {
+      if (this.lookups[i].lookupType == lookupType) {
+        for (let j = 0; j < this.lookups[i].values.length; j++) {
+          if (this.lookups[i].values[j].default == true) {
+            defaultValue = this.lookups[i].values[j].lookupValue;
+            break;
+          }
+        }
+      }
+    }
+    return defaultValue;
+  }
+
+  /*
   // get default option (for control's initialization)
   getDefaultValue(lookup: Lookup): number {
 
@@ -85,26 +107,26 @@ export class LookupService {
       defaultValue = lookup.values[0].lookupValue;
     }
 
-
     // map kann nicht abgebrochen werden - darum for
     // prototype "some" würde auch gehen
     // https://stackoverflow.com/questions/12260529/break-statement-in-javascript-array-map-method
 
     for (let i = 0; i < lookup.values.length; i++) {
-      if (lookup.values[i].default === true) {
+      if (lookup.values[i].default == true) {
         defaultValue = lookup.values[i].lookupValue;
         break;
       }
     }
+    */
 
     /*
     lookup.values.map(lv => {
       if (lv.default) { defaultValue = lv.lookupValue; }
     });
-    */
 
     return defaultValue;
   }
+  */
 
   // get the text of a given type/value
   getText(lookup: Lookup, value: number): string {

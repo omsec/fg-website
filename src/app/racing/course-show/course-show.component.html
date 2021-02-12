@@ -7,6 +7,15 @@
 
   <p>can modify: {{canModify}}</p>
 
+  <p *ngIf="course.route">
+    based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
+  </p>
+
+  <p *ngIf="course.carClassesText">
+    Car Classes:
+    {{course.carClassesText}}
+  </p>
+
 </div>
 
 <hr>

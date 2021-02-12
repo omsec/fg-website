@@ -7,6 +7,15 @@
   <p>creatd by: {{ course.metaInfo.createdName }}</p>
   <p>can modify: {{ this.canModify }}</p>
 
+  <p *ngIf="course.route">
+    based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
+  </p>
+
+  <p *ngIf="course.carClassesText">
+    Car Classes:
+    {{course.carClassesText}}
+  </p>
+
   <!-- hier wird alles als error behandelt, auch 204-->
   <p *ngIf="loadingErr!=''">OOPS something went wrong</p>
 

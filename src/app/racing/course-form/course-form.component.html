@@ -38,16 +38,17 @@
       </div>
 
       <div class="p-field p-col-4">
-        <label for="carClass">Car Class</label>
-        <p-dropdown
-        inputId="carClass"
-          formControlName="carClassCode"
-          [options]="carClass.values"
+        <label for="carClasses">Car Classes</label>
+        <p-multiSelect
+          id="carClasses"
+          formControlName="carClassesCode"
+          [options]="carClasses.values"
           optionLabel="textEN"
           optionValue="lookupValue"
           optionDisabled="disabled"
-          placeholer="test">
-        </p-dropdown>
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.carClassesCode.errors }">
+        </p-multiSelect>
+        <small *ngIf="submitted && frm.carClassesCode.value.length == 0" class="p-invalid">Car classes are required</small>
       </div>
 
       <div class="p-field p-col-4">
@@ -74,6 +75,21 @@
           optionDisabled="disabled">
         </p-dropdown>
       </div>
+
+      <div class="p-field p-col-11 p-md-11">
+        <label for="baseRoute">Base Route</label>
+        <p-autoComplete
+          id="baseRoute"
+          formControlName="route"
+          [suggestions]="routes"
+          (completeMethod)="searchRoute($event)"
+          field="name"
+          [dropdown]="true"
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.name.errors }">
+        </p-autoComplete>
+        <small *ngIf="submitted && frm.name.errors" class="p-invalid">Route Name is required</small>
+      </div>
+
     </div>
 
     <!-- todo: add/edit switch-->

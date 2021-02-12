@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Course } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { CourseService } from 'src/app/services/course.service';
+import { LookupService } from 'src/app/services/lookup.service';
 
 @Component({
   selector: 'fg-course-show2',
@@ -19,14 +20,36 @@ export class CourseShow2Component implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private courseService: CourseService) { }
+    private courseService: CourseService,
+    private lookupService: LookupService) { } // ToDo: behelfsmässig eingefügt
 
   ngOnInit(): void {
+    // ToDO: Dynamisch machen
     this.courseId = this.route.snapshot.params.id; // gemäss app.routing
 
     // used to signal error (returned by catchError from pipe)
-    const noData = CourseFactory.empty();
+    const noData = CourseFactory.empty(this.lookupService);
 
+    // inhalt dynamisch laden (link auf gleiche Route/Component)
+    this.route.paramMap.subscribe(params => {
+      let currentId = params.get('id');
+      if (currentId) {
+        this.courseId = currentId;
+        this.course$ = this.courseService.getSingle(this.courseId)
+          .pipe(
+            tap(course => {
+              this.canModify = this.courseService.canModify(course);
+            }),
+            catchError(err => {
+              console.log(err);
+              this.loadingErr = err;
+              return of(noData)
+            })
+          );
+      }
+    });
+
+    /*
     this.course$ = this.courseService.getSingle(this.courseId)
       .pipe(
         tap(course => {
@@ -38,6 +61,7 @@ export class CourseShow2Component implements OnInit {
           return of(noData)
         })
       );
+    */
   }
 
 }

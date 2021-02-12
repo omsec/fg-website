@@ -21,6 +21,23 @@ export class CourseShowComponent implements OnInit {
 
 
   ngOnInit(): void {
+    // inhalt dynamisch laden (link auf gleiche Route/Component)
+    this.route.paramMap.subscribe(params => {
+      let currentId = params.get('id');
+      if (currentId) {
+        this.courseId = currentId;
+        this.courseService.getSingle(this.courseId).subscribe(
+          res => {
+            this.course = res;
+            this.canModify = this.courseService.canModify(this.course);
+          },
+          errMsg => { this.loadingErr =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
+        );
+      }
+    });
+
+    /*
+    // statische variante - nicht mehr benutzen
     this.courseId = this.route.snapshot.params.id; // gemäss app.routing
     this.courseService.getSingle(this.courseId).subscribe(
       res => {
@@ -29,5 +46,6 @@ export class CourseShowComponent implements OnInit {
       },
       errMsg => { this.loadingErr =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
     )
+    */
   }
 }

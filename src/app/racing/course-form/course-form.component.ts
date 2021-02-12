@@ -1,14 +1,17 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
-import { Course } from 'src/app/models/course';
+import { Course, CourseListItem, CourseRef, CourseSearch } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { Lookup } from 'src/app/models/lookup';
 import { LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { CourseService } from 'src/app/services/course.service';
 import { LookupService } from 'src/app/services/lookup.service';
-import { ShareCodeExistsValidatorService } from 'src/app/validators/sharecode-exists-validator.service';
+// import { ShareCodeExistsValidatorService } from 'src/app/validators/sharecode-exists-validator.service';
 
 @Component({
   selector: 'fg-course-form',
@@ -19,7 +22,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
   // https://stackoverflow.com/questions/54104187/typescript-complain-has-no-initializer-and-is-not-definitely-assigned-in-the-co/54104796
   form!: FormGroup
 
-  @Input() course = CourseFactory.empty();
+  @Input() course = CourseFactory.empty(this.lookupService);
   @Input() editing = false; // mode (create, edit)
 
   // Event für die Steuerkomponente
@@ -36,13 +39,18 @@ export class CourseFormComponent implements OnInit, OnChanges {
   game!: Lookup;
   type!: Lookup;
   series!: Lookup;
-  carClass!: Lookup;
+  carClasses!: Lookup; // options, multi-select
+
+  routes: CourseListItem[] = [];
+  routes$ = new Subject<CourseSearch>();
+  searchingRouteFailedMsg = '';
 
   constructor(
     private route: ActivatedRoute, // für lookups via Resolver
     private formBuilder: FormBuilder,
     private auth: AuthenticationService,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private courseService: CourseService
     // private shareCodeExistsValidator: ShareCodeExistsValidatorService
   ) { }
 
@@ -66,18 +74,32 @@ export class CourseFormComponent implements OnInit, OnChanges {
     this.visibility = this.lookupService.getOptions(this.lookups, LookupTypes.Visibility, false);
     this.game = this.lookupService.getOptions(this.lookups, LookupTypes.Game, false);
     this.series = this.lookupService.getOptions(this.lookups, LookupTypes.Series, false);
-    this.carClass = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
+    this.carClasses = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
+
+    // type-ahead
+    this.routes$.asObservable().pipe(
+      filter(search => (search.searchTerm == '' || search.searchTerm.length >= 3)),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(search => this.courseService.getAll(search))).subscribe(
+        routes => { this.routes = routes; },
+        errMsg => { this.searchingRouteFailedMsg = errMsg; }
+      );
 
     // Formularmodell
+     // ToDo: GetDefault muss hier ein Array von Zahlen liefern für multi-select [3] oder [3, 1] ...
+     // noch besser: Im Model initialisieren, empty?
     this.form = this.formBuilder.group({
-      visibilityCode: [this.lookupService.getDefaultValue(this.visibility), Validators.required],
-      gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
+      visibilityCode: [this.course.visibilityCode, Validators.required],
+      gameCode: [this.course.gameCode, Validators.required],
       //forzaSharing: [null as unknown as number,
         //[Validators.required, Validators.min(100000000), Validators.max(999999999)], [this.shareCodeExistsValidator]],
         forzaSharing: [null as unknown as number, [Validators.required, Validators.min(100000000), Validators.max(999999999)]],
       name: ['', Validators.required],
-      seriesCode: [this.lookupService.getDefaultValue(this.series), Validators.required],
-      carClassCode: [this.lookupService.getDefaultValue(this.carClass), Validators.required], // ToDo: Mehrfachauswahlen vorsehen
+      seriesCode: [this.course.seriesCode, Validators.required],
+      carClassesCode: [this.course.carClassesCode, Validators.required],
+      // carClassesCode: [null, Validators.required], // multiselection kann leer gelassen werden
+      route: [null, Validators.required] // type: Course
     });
   }
 
@@ -85,7 +107,6 @@ export class CourseFormComponent implements OnInit, OnChanges {
   private setFormValues(course: Course): void {
     this.form.patchValue(course);
     // Felder mit anderem Namen im Formular als im Modell 'manuell' setzen (achtung wenn disabed, siehe Buch)
-
   }
 
   // Hilfsmethode für einfacheren Zugriff auf die Controls
@@ -95,13 +116,10 @@ export class CourseFormComponent implements OnInit, OnChanges {
   onSubmit(): void {
     this.submitted = true;
 
-//     console.log(this.frm.series.value)
-
     // Falls das Formular ungültig ist, abbrechen
     if (this.form.invalid) { return; }
 
-
-    const course = CourseFactory.empty();
+    const course = CourseFactory.empty(this.lookupService);
 
     if (this.editing) {
       course.id = this.course?.id;
@@ -114,9 +132,24 @@ export class CourseFormComponent implements OnInit, OnChanges {
     course.forzaSharing = this.frm.forzaSharing.value;
     course.name = this.frm.name.value;
     course.seriesCode = this.frm.seriesCode.value;
-    course.carClassCode = this.frm.carClassCode.value;
+    course.carClassesCode = this.frm.carClassesCode.value;
+    // könnte auch in der Factory erstellt werden
+    let route: CourseRef = {
+      id: this.frm.route.value.id,
+      name: this.frm.route.value.name
+    }
+    course.route = route;
 
     this.submitCourse.emit(course);
+  }
+
+  searchRoute(event: any) {
+    let search: CourseSearch = {
+      gameText: this.frm.gameCode.value,
+      searchTerm: event.query
+    };
+    this.routes$.next(search);
+    //console.log(search);
   }
 
 }

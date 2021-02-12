@@ -13,8 +13,15 @@ export interface Course {
   name: string;
   seriesCode: number;
   seriesText?: string;
-  carClassCode: number;
-  carClassText?: string;
+  carClassesCode: number[];
+  carClassesText?: string[];
+  route?: CourseRef;
+}
+
+// nested course reference
+export interface CourseRef {
+  id: string;
+  name: string;
 }
 
 // recuded structure used for lists (read-only to client, hence no nulls)
@@ -30,8 +37,8 @@ export interface CourseListItem {
   forzaSharing: number;
   seriesCode: number;
   seriesText: string;
-  carClassCode: number;
-  carClassText: string;
+  carClassesCode: number[];
+  carClassesText: string[];
 }
 
 // not sent to the API directly, it's used inside this app

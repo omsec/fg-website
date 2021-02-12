@@ -16,6 +16,8 @@ import { MessageModule } from 'primeng/message';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
   declarations: [],
@@ -34,7 +36,9 @@ import { ToastModule } from 'primeng/toast';
     MessageModule,
     DynamicDialogModule,
     PasswordModule,
-    ToastModule
+    ToastModule,
+    AutoCompleteModule,
+    MultiSelectModule
   ],
   exports: [
     ReactiveFormsModule,
@@ -50,7 +54,9 @@ import { ToastModule } from 'primeng/toast';
     MessageModule,
     DynamicDialogModule,
     PasswordModule,
-    ToastModule
+    ToastModule,
+    AutoCompleteModule,
+    MultiSelectModule
   ]
 })
 export class AppSharedModule { }

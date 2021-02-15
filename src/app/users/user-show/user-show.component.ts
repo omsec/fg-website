@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { User } from '../models/user';
-import { UserFactory } from '../models/user-factory';
-import { UserService } from '../services/user.service';
+import { User } from '../../models/user';
+import { UserFactory } from '../../models/user-factory';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'fg-user-show',

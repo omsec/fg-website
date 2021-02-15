@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+//import { CommonModule } from '@angular/common';
 
 import { RacingRoutingModule } from './racing-routing.module';
 import { AppSharedModule } from '../shared/app-shared.module';
@@ -13,9 +13,15 @@ import { CourseEditComponent } from './course-edit/course-edit.component';
 
 
 @NgModule({
-  declarations: [CourseListComponent, CourseFormComponent, CourseCreateComponent, CourseShowComponent, CourseShow2Component, CourseEditComponent],
+  declarations: [
+    CourseListComponent,
+    CourseFormComponent,
+    CourseCreateComponent,
+    CourseShowComponent,
+    CourseShow2Component,
+    CourseEditComponent],
   imports: [
-    CommonModule,
+    //CommonModule,
     RacingRoutingModule,
     AppSharedModule
   ]

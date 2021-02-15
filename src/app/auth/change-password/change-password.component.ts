@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
-import { PasswordValidatorService } from '../validators/password-validator.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { PasswordValidatorService } from '../../validators/password-validator.service';
 
 @Component({
   selector: 'fg-change-password',

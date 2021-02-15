@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, map, catchError, delay } from 'rxjs/operators';
+import { retry, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { UserRaw } from '../models/user-raw';
@@ -33,7 +33,7 @@ export class UserService {
         `${environment.apiUrl}/users/${userId}`)
           .pipe(
             retry(3),
-            delay(1000), // test loading msg in component
+            // delay(1000), // test loading msg in component
             map(userRaw => UserFactory.fromRaw(userRaw))
           );
     }

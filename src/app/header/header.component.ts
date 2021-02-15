@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { ChangePasswordComponent } from '../auth/change-password/change-password.component';
 import { User } from '../models/user';
 import { UserFactory } from '../models/user-factory';
 import { AuthenticationService } from '../services/authentication.service';
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnDestroy {
       {
           label: loginName,
           items: [
-              {label: 'Profile', icon: 'pi pi-fw pi-plus', routerLink: ['/users', user.id]} ,
+              {label: 'Profile', icon: 'pi pi-fw pi-plus', routerLink: ['/users/users', user.id]} ,
               {label: 'Change Password', disabled: !loggedIn, command: () => { this.changePassword(); } }
           ]
       },

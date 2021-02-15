@@ -10,28 +10,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
 import { AuthenticationErrorInterceptor } from './interceptors/authentication-error.interceptor';
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
-import { UserShowComponent } from './user-show/user-show.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
-import { ChangePasswordComponent } from './change-password/change-password.component';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    HeaderComponent,
-    LoginComponent,
-    UserShowComponent,
-    ChangePasswordComponent
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AppSharedModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule // statisch laden (kein Lazy Loading im Routing)
   ],
   providers: [
     // Reihenfolge 1-2-3 beim Senden und 3-2-1 beim Empfangen; Original Error-Objekt weiterreichen
@@ -39,9 +35,6 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true}
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [
-    ChangePasswordComponent
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="user$ | async as usr; else loading">
   <h1>{{usr.loginName}}</h1>
 <!-- hier wird alles als error behandelt, auch 204-->
- <p *ngIf="loadingError!=''">{{loadingError}}</p>
+ <p *ngIf="errorMsg!=''">{{errorMsg}}</p>
 
 </ng-container>
 

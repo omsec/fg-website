@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, map, catchError } from 'rxjs/operators';
+import { retry, map, catchError, delay } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
@@ -45,113 +45,41 @@ export class CourseService {
             return noData; // empty list ist NOT an error
           }
         }),
-        catchError(err => {
-          // console.log(err);
-          return throwError('Please try again later');
-        })
+        catchError(this.errorHandler)
       );
   }
 
-  /*
-  // Version für POST
-  getAll(searchTerm: string): Observable<CourseListItem[]> {
-    const noData: CourseListItem[] = [];
-
-    return this.http.post<CourseListItemRaw[]>(
-      `${environment.apiUrl}/courses`, { searchTerm })
-      .pipe(
-        // delay(1000), // test loading/error screen
-        retry(1),
-        map(coursesRaw => {
-          // an empty list is null
-          if (coursesRaw) {
-            return coursesRaw.map(course => CourseListItemFactory.fromRaw(course));
-          } else {
-            return noData;
-          }
-        }),
-        catchError(err => {
-          // console.log(err);
-          return throwError('Please try again later');
-        })
-      );
-  }
-  */
-
-  /*
-  getAll(searchTerm: string): Observable<CourseListItem[]> {
-    return this.http.post<CourseListItemRaw[]>(
-      `${environment.apiUrl}/courses`, { searchTerm })
-      .pipe(
-        retry(1),
-        map((coursesRaw => coursesRaw.map(course => CourseListItemFactory.fromRaw(course))))
-      );
-  }
-  */
-
-  // ToDo: getSingle - also check for changed (lowered) visibility and report in show-components (interceptor?)
   getSingle(courseId: string): Observable<Course> {
     return this.http.get<CourseRaw>(
       `${environment.apiUrl}/courses/${courseId}`)
       .pipe(
-        // delay(1000), // testing loading/error in template :-)
+        delay(1000), // testing loading/error in template :-)
         retry(1),
         map(courseRaw => {
           // check for empty result (204)
           if (courseRaw) {
             return CourseFactory.fromRaw(courseRaw);
           } else {
-            throw 'null received' // convert 204 into an error...
+            throw 'null received' // convert 204 into an error...(for use in errorHandler)
           }
         }),
-        catchError(err => {
-          if (err == 'null received') {
-            err = 'Route not found' // ...and send a human-readable message to the component
-          } else {
-            err = 'Please try again later'
-          }
-          return throwError(err)
-        })
+        catchError(this.errorHandler)
       );
   }
-
-  /*
-  getSingle(courseId: string): Observable<Course> {
-    return this.http.get<CourseRaw>(
-      `${environment.apiUrl}/courses/${courseId}`)
-      .pipe(
-        // delay(1000), // testing loading/error in template :-)
-        retry(1),
-        map(courseRaw => CourseFactory.fromRaw(courseRaw)),
-        catchError((err) => {
-          //console.log(err); // log the actual error, eg. status 0/unknown Error for time-out
-          // "convert" 204/null into an error with human-readable message
-          if (err == 'null received') {
-            err = 'Route not found'
-          } else {
-            err = 'Please try again later'
-          }
-
-          return throwError(err);
-        })
-      );
-  }
-  */
 
   // may return { id: string } or { api-error }
-  // no additional error handliong required - taken care of by http-error interceptor
   add(course: Course): Observable<any> {
     return this.http.post<any>(
-      `${environment.apiUrl}/course/add`, course) // course im Body übergeben
+      `${environment.apiUrl}/course/add`, course)
+        .pipe(catchError(this.errorHandler))
   }
 
-  // no additional error handliong required - taken care of by http-error interceptor
   update(course: Course): Observable<any> {
     return this.http.put(
       `${environment.apiUrl}/course/edit/${course.id}`,
       course, // course im Body übergeben
       // { responseType: 'text'} // zerstört error handling!!
-    )
+    ).pipe(catchError(this.errorHandler))
   }
 
   existsForzaShare(sharingCode: number): Observable<boolean> {
@@ -170,6 +98,31 @@ export class CourseService {
       (this.authenticationService.currentUserValue.roleCode == UserRole.Admin)
         || (this.authenticationService.currentUserValue.id == course.metaInfo.createdID)
     )
+  }
+
+  // Für lokale Fehrlebehandlung von "Spezialfällen"
+  // bpw. abfangen von "No Data" (204) als Fehlermeldung
+  private errorHandler(error: HttpErrorResponse): Observable<any> {
+    console.log('SERVICE: ', error);
+    console.log(error.status);
+
+    if (typeof(error) == 'string') {
+      // str: 'null received'
+      return throwError('Route not found') // ...and send a human-readable message to the component
+    } else {
+      if (error.status) {
+        // server errors
+        if (error.status === 422) {
+          return throwError(error.error.clientMsg);
+        } else {
+          return throwError('something went wrong');
+        }
+      } else {
+        // client errors (programmierfehler, api time-out...)
+        // console.log(error);
+        return throwError('something went wrong');
+      }
+    }
   }
 
 }

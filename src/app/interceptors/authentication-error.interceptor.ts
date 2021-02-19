@@ -33,7 +33,7 @@ export class AuthenticationErrorInterceptor implements HttpInterceptor {
       // const error = err.error // error msg for use in GUI
 
       // do not refresh auth routes
-      if (request.url.includes('login') || request.url.includes('refresh')) {
+      if (request.url.includes('login') || request.url.includes('refresh') /*|| request.url.includes('register')*/) {
         // check for already failed refresh
         if (request.url.includes('refresh')) {
           this.authenticationService.logout();

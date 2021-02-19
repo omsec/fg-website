@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, startWith, switchMap } from 'rxjs/operators';
-import { Course, CourseListItem, CourseSearch } from 'src/app/models/course';
+import { CourseListItem, CourseSearch } from 'src/app/models/course';
 import { Lookup } from 'src/app/models/lookup';
 import { LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -17,7 +17,8 @@ import { LookupService } from 'src/app/services/lookup.service';
 })
 export class CourseListComponent implements OnInit {
   courses$: Observable<CourseListItem[]> | undefined;
-  loadingError = false; // üblicherwiese nur standard-text details/codes, sonst str und aufbereitung im service
+  //loadingError = false; // üblicherwiese nur standard-text details/codes, sonst str und aufbereitung im service
+  errorMsg = '';
   search$ = new Subject<CourseSearch>();
 
   form!: FormGroup;
@@ -61,7 +62,8 @@ export class CourseListComponent implements OnInit {
         return this.courseService.getAll(srch).pipe(
           catchError((err) => { // param falls z. B. str vom service ausgelesen werden soll
             console.log(err)
-            this.loadingError = true
+            //this.loadingError = true
+            this.errorMsg = err;
             return of(noData)
             }));
         })

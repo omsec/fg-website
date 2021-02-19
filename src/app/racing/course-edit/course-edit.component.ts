@@ -11,7 +11,7 @@ import { CourseService } from 'src/app/services/course.service';
 })
 export class CourseEditComponent implements OnInit {
   course: Course | undefined;
-  loadingErr = '';
+  errorMsg = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +32,7 @@ export class CourseEditComponent implements OnInit {
       switchMap((courseId: string) => this.courseService.getSingle(courseId))
     ).subscribe(
       res => { this.course = res; },
-      errMsg => { this.loadingErr = errMsg; }
+      errMsg => { this.errorMsg = errMsg; }
     );
   }
 
@@ -44,8 +44,8 @@ export class CourseEditComponent implements OnInit {
         // model route auch angeben
         this.router.navigate(['routes/routes', course.id]);
       },
-      error => {
-        this.loadingErr = error.error.msg;
+      errMsg => {
+        this.errorMsg = errMsg;
       }
     );
   }

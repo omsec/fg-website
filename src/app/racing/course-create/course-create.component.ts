@@ -27,11 +27,11 @@ export class CourseCreateComponent {
 
     this.courseService.add(course).subscribe(
       newCourse => {
-        // model route auch angeben
+        // modul route auch angeben
         this.router.navigate(['routes/routes', newCourse.id]);
       },
-      error => {
-        this.errorMsg = error.error.msg;
+      errMsg => {
+        this.errorMsg = errMsg
       }
     );
   }

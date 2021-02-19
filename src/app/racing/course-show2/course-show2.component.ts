@@ -15,7 +15,7 @@ import { LookupService } from 'src/app/services/lookup.service';
 export class CourseShow2Component implements OnInit {
   courseId = '';
   course$: Observable<Course> | undefined;
-  loadingErr = '';
+  errorMsg = '';
   canModify = false;
 
   constructor(
@@ -41,8 +41,8 @@ export class CourseShow2Component implements OnInit {
               this.canModify = this.courseService.canModify(course);
             }),
             catchError(err => {
-              console.log(err);
-              this.loadingErr = err;
+              // console.log(err);
+              this.errorMsg = err;
               return of(noData)
             })
           );

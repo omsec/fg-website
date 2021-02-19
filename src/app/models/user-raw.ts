@@ -6,7 +6,7 @@ export interface UserRaw {
   roleText?: string,
   languageCode: number,
   languageText?: string,
-  eMailAddress: string,
-  xBoxTag?: string,
-  lastSeenTS: string
+  eMail: string,
+  XBoxTag?: string,
+  lastSeen: string[];
 }

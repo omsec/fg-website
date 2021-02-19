@@ -1,14 +1,18 @@
 import { UserRaw } from './user-raw';
 import { User } from './user';
-import { stringify } from '@angular/compiler/src/util';
 import { UserLanguage, UserRole } from './lookup-values';
 
 export class UserFactory {
 
   static fromRaw(userRaw: UserRaw): User {
+    let lastSeen: Date[] = [];
+    if (userRaw.lastSeen) {
+      userRaw.lastSeen.map(item => lastSeen.push(new Date(item)));
+    }
+
     return {
       ...userRaw,
-      lastSeenTS: new Date(userRaw.lastSeenTS)
+      lastSeen
     };
   }
 
@@ -21,9 +25,9 @@ export class UserFactory {
       roleText: '',
       languageCode: UserLanguage.English,
       languageText: '',
-      eMailAddress: '',
-      xBoxTag: '',
-      lastSeenTS: new Date()
+      eMail: '',
+      XBoxTag: '',
+      lastSeen: []
     }
   }
 }

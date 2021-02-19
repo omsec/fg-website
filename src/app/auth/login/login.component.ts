@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   // ToDO: als Prperty mitgeben (im GUI Button)
   // returnUrl = ''; // falls die Login-Komponente von einer protected Seite aufgerufen wurde
 
-  error = ''; // Fehlermeldung (text)
+  errorMsg = ''; // Fehlermeldung (text)
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,19 +56,15 @@ export class LoginComponent implements OnInit {
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
           // add user's id to route if required
-          if (returnUrl == '/users/') {
+          if (returnUrl == '/users/users/') {
             this.router.navigate([returnUrl + usr.id]);
           } else {
             this.router.navigate([returnUrl]);
           }
         },
-        (error) => {
+        (errMsg) => {
           // msg im template über ngIf angezeigt
-          if (error.status == 401 || error.status === 403) {
-            this.error = error.error
-          } else {
-            this.error = 'Please try again later'
-          }
+          this.errorMsg = errMsg;
           this.loading = false;
           // console.log(error)
         }

@@ -7,11 +7,13 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { AppSharedModule } from '../shared/app-shared.module';
 import { LoginComponent } from './login/login.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    RegisterComponent
   ],
   imports: [
     //CommonModule,

@@ -46,7 +46,8 @@
                     <p-button
                       label="Sign Up"
                       icon="pi pi-user-plus"
-                      styleClass="p-button-success">
+                      styleClass="p-button-success"
+                      [routerLink]="['/register']">
                     </p-button> <!-- todo disabled? -->
                     <!-- spinner?-->
                 </div>
@@ -65,7 +66,7 @@
 <div class="p-grid" style="margin: 2rem;">
   <div class=p-col-12 p-md-6 p-lg-3>
       <div class="box">
-        <p-message *ngIf="error" severity="error" [text]="error"></p-message>
+        <p-message *ngIf="errorMsg!=''" severity="error" [text]="errorMsg"></p-message>
       </div>
   </div>
 </div>

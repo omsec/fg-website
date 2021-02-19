@@ -1,23 +1,25 @@
-<p>course-show2 works!</p>
+<p>static Text</p>
 
 
 <ng-container *ngIf="course$ | async as course; else loading">
 
-  <p>{{ course.name }}</p>
-  <p>creatd by: {{ course.metaInfo.createdName }}</p>
-  <p>can modify: {{ this.canModify }}</p>
+  <ng-container *ngIf="errorMsg==''">
+    <p>{{ course.name }}</p>
+    <p>creatd by: {{ course.metaInfo.createdName }}</p>
+    <p>can modify: {{ this.canModify }}</p>
 
-  <p *ngIf="course.route">
-    based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
-  </p>
+    <p *ngIf="course.route">
+      based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
+    </p>
 
-  <p *ngIf="course.carClassesText">
-    Car Classes:
-    {{course.carClassesText}}
-  </p>
+    <p *ngIf="course.carClassesText">
+      Car Classes:
+      {{course.carClassesText}}
+    </p>
+  </ng-container>
 
   <!-- hier wird alles als error behandelt, auch 204-->
-  <p *ngIf="loadingErr!=''">OOPS something went wrong</p>
+  <p *ngIf="errorMsg!=''">{{ errorMsg }}</p>
 
 </ng-container>
 

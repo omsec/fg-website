@@ -1,5 +1,6 @@
 <ng-container *ngIf="courses$ | async as courses; else loading">
 
+  <!-- static content, always shown after load -->
   <div class="card content">
     <form [formGroup]="form">
       <div class="p-fluid p-formgrid p-grid">
@@ -33,16 +34,20 @@
     </form>
   </div>
 
+  <!-- content shown if data is present -->
+  <ng-container *ngIf="courses.length>0">
+    <h5>Table / Static Title</h5>
+    <ul *ngFor="let course of courses">
+      <li><a [routerLink]="['routes', course.id]">{{ course.name }}</a></li>
+    </ul>
+  </ng-container>
+
+  <!-- content shown if no data is present (no error) -->
+  <p *ngIf="courses.length==0 && errorMsg ==''">No Data</p>
 
 
-  <p *ngIf="courses.length==0">No Data</p>
-
-  <ul *ngFor="let course of courses">
-    <li><a [routerLink]="['routes', course.id]">{{ course.name }}</a></li>
-  </ul>
-
-  <!-- hier wird alles als error behandelt, auch 204-->
-  <p *ngIf="loadingError===true">OOPS something went wrong</p>
+  <!-- content shown if there was an error -->
+  <p *ngIf="errorMsg!=''">{{errorMsg}}</p>
 
 </ng-container>
 

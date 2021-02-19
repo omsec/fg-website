@@ -6,7 +6,7 @@ export interface User {
   roleText?: string,
   languageCode: number,
   languageText?: string,
-  eMailAddress: string,
-  xBoxTag?: string,
-  lastSeenTS: Date
+  eMail: string,
+  XBoxTag?: string,
+  lastSeen: Date[]
 }

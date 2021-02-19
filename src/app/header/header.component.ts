@@ -54,7 +54,11 @@ export class HeaderComponent implements OnDestroy {
       },
       {
         label: 'Tunes',
-        icon: 'pi pi-fw pi-pencil'
+        icon: 'pi pi-fw pi-pencil',
+        items: [
+          {label: 'Error Testing', icon: 'pi pi-fw pi-trash', routerLink: ['/users/test']},
+          {label: 'Get Route async', icon: 'pi pi-fw pi-trash', routerLink: ['/routes/routes2', '602647c45d33677643a2b0b9']}
+        ]
       },
       {
         label: 'Designs',

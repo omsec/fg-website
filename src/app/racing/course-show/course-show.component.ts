@@ -11,7 +11,7 @@ import { CourseService } from 'src/app/services/course.service';
 export class CourseShowComponent implements OnInit {
   courseId = '';
   course: Course | undefined
-  loadingErr = ''; // '' = loading, sonst default TExt
+  errorMsg = ''; // '' = loading, sonst default TExt
   canModify = false;
 
   constructor(
@@ -23,6 +23,7 @@ export class CourseShowComponent implements OnInit {
   ngOnInit(): void {
     // inhalt dynamisch laden (link auf gleiche Route/Component)
     this.route.paramMap.subscribe(params => {
+      this.course = undefined; // make loading animation re-appear after a route change
       let currentId = params.get('id');
       if (currentId) {
         this.courseId = currentId;
@@ -31,7 +32,7 @@ export class CourseShowComponent implements OnInit {
             this.course = res;
             this.canModify = this.courseService.canModify(this.course);
           },
-          errMsg => { this.loadingErr =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
+          errMsg => { this.errorMsg =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
         );
       }
     });

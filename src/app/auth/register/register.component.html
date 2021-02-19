@@ -1,0 +1,93 @@
+<!-- statt style Klasse in styles.css -->
+
+<!-- standard mit 3 boxen, fluid -->
+<div class="p-grid" style="margin: 2rem;">
+  <div class="p-col-12 p-md-6 p-lg-3">
+      <div class="box"></div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-6">
+      <div class="box">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="card">
+            <div class="p-grid">
+                <div class="p-col-5 p-d-flex p-ai-center p-jc-center">
+                    <div class="p-fluid">
+                        <div class="p-field">
+                            <label for="username">Username</label>
+                            <input
+                              pInputText id="username"
+                              type="text"
+                              formControlName="username"
+                              [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.username.errors }"/>
+                            <small *ngIf="submitted && frm.username.errors?.required" class="p-invalid">Username is required</small>
+                            <small *ngIf="frm.username.errors?.userNameExists" class="p-invalid">Username not available</small>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="email">eMail</label>
+                          <input
+                            pInputText id="email"
+                            type="text"
+                            formControlName="eMail"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.eMail.errors }"/>
+                          <small *ngIf="submitted && frm.eMail.errors?.required" class="p-invalid">email is required</small>
+                          <small *ngIf="frm.eMail.errors?.eMailAddressExists" class="p-invalid">email address is already associated with a user account</small>
+                        </div>
+
+                        <div class="p-field">
+                            <label for="password">Password</label>
+                            <input
+                              pPassword id="password"
+                              type="password"
+                              formControlName="password"
+                              [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.password.errors }" />
+                            <small *ngIf="submitted && frm.password.errors" class="p-invalid">Password is required</small>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="confirmPwd">Repeat Password</label>
+                          <input
+                            pInputText id="confirmPwd"
+                            type="password"
+                            formControlName="confirmPwd"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.password.errors }" />
+                          <small *ngIf="submitted && frm.password.errors" class="p-invalid">Please repeat password</small>
+                        </div>
+                        <!-- https://github.com/primefaces/primeng/issues/9636 -->
+                        <div class="p-field-checkbox">
+                          <p-checkbox
+                            inputId="accepted"
+                            formControlName="termsAccepted"
+                            value="termsAccepted"
+                            [binary]="true">
+                          </p-checkbox>
+                          <label for="accepted">I accept terms &#38; conditions </label>
+                        </div>
+                        <small *ngIf="submitted && frm.termsAccepted.errors" class="p-invalid">Please agree if you would like to use this service.</small>
+
+                        <p-button
+                          type="submit"
+                          label="Create Account"
+                          [disabled]="loading">
+                      </p-button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+  </div>
+  <div class="p-col-12 p-md-6 p-lg-3">
+      <div class="box"></div>
+  </div>
+</div>
+
+<!-- ToDO Design, msg evtrl. löschen bei ontype-->
+<div class="p-grid" style="margin: 2rem;">
+  <div class=p-col-12 p-md-6 p-lg-3>
+      <div class="box">
+        <p-message *ngIf="errorMsg" severity="error" [text]="errorMsg"></p-message>
+      </div>
+  </div>
+</div>

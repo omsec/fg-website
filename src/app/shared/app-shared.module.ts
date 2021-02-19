@@ -17,6 +17,9 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
+
+// ToDo: mit Variablen gemäss Buch (Kap Modules)
 
 @NgModule({
   declarations: [],
@@ -37,7 +40,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     PasswordModule,
     ToastModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    CheckboxModule
   ],
   exports: [
     CommonModule,
@@ -56,7 +60,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     PasswordModule,
     ToastModule,
     AutoCompleteModule,
-    MultiSelectModule
+    MultiSelectModule,
+    CheckboxModule
   ]
 })
 export class AppSharedModule { }

@@ -33,7 +33,8 @@ export class AuthenticationService {
   }
 
   // Keine Fehlerbehandlung an dieser Stelle notwendig - wird in der Komponente (Login) gemacht
-  login(username: string, password: string): Observable<User> {
+  // ToDO: 2x pipe? - scheinbar nicht nötig so
+  /*login(username: string, password: string): Observable<User> {
     return this.http.post<UserRaw>(
       `${environment.apiUrl}/login`, { loginName: username, password: password } )
       .pipe(map(userRaw => UserFactory.fromRaw(userRaw)))
@@ -43,8 +44,24 @@ export class AuthenticationService {
           this.currentUserSubject.next(user);
           return user;
           }
-        )
+        ),
+        catchError(this.errorHandler)
       );
+  }*/
+
+  login(username: string, password: string): Observable<User> {
+    return this.http.post<UserRaw>(
+      `${environment.apiUrl}/login`, { loginName: username, password: password } )
+        .pipe(
+          map(userRaw => UserFactory.fromRaw(userRaw)),
+          map(user => {
+            // client persistence
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+            return user;
+            }),
+          catchError(this.errorHandler)
+        )
   }
 
   // Error Handling zur Sicherheit, falls der Zustand inkonsistent wird (Cookie weg, Current User noch im local storage)
@@ -57,11 +74,11 @@ export class AuthenticationService {
             localStorage.removeItem('currentUser');
             this.currentUserSubject.next(UserFactory.empty());}
           ),
-          catchError(this.errorHandler)
+          catchError(this.errorHandlerLogOut)
         );
   }
 
-  // ToDO: Error Handling: log-out & set empty User => logout
+  // ToDO: Error Handling: log-out & set empty User => logout, errorHandler/LogOut-Handler
   refreshToken(): Observable<User> {
     return this.http.post<UserRaw>(
       `${environment.apiUrl}/refresh`, null)
@@ -89,10 +106,51 @@ export class AuthenticationService {
           catchError(err => {return throwError('Please try again later') }));
   }
 
-  private errorHandler(error: HttpErrorResponse): Observable<any> {
+  // may return { id: string } or { api-error (ToDo) }
+  // no additional error handliong required - taken care of by http-error interceptor
+  register(user: User): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/register`, user).pipe(
+        map(id => {}), // ToDo: eigentlich unnötig, aber ohne geht's nicht
+        catchError(this.errorHandler)
+      );
+  }
+
+  // used for validation of new accounts
+  existsUserName(userName: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/user/exists`, { loginName: userName })
+    .pipe(map(response => response.exists === true))
+  }
+
+  // used for validation of new accounts
+  existsEMailAddress(eMailAddress: string): Observable<boolean> {
+    return this.http.post<any>(`${environment.apiUrl}/email/exists`, { eMailAddress })
+    .pipe(map(response => response.exists === true))
+  }
+
+  // ToDo: in logOut integrieren
+  private errorHandlerLogOut(error: HttpErrorResponse): Observable<any> {
     localStorage.removeItem('currentUser');
     // this.currentUserSubject.next(UserFactory.empty()) // nicht nötig, schon closed (error)
     return throwError(error)
+  }
+
+  // Für lokale Fehrlebehandlung (interceptors sind global)
+  // hier kann eine benutzerfeundliche Meldung der Fehler-Codes erzeugt werden, Logging etc.
+  private errorHandler(error: HttpErrorResponse): Observable<any> {
+    console.log('SERVICE: ', error);
+    console.log(error.status);
+    if (error.status) {
+      // server errors
+      switch (error.status) {
+        case 422: return throwError(error.error.clientMsg);
+        case 401 || 403: return throwError('invalid user name or password');
+        default: return throwError('something went wrong');
+      }
+    } else {
+      // Programmierfehler
+      return throwError('something went wrong');
+    }
   }
 
 

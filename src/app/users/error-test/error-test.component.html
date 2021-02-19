@@ -1,12 +1,8 @@
-<div *ngIf="course; else loading">
+<div *ngIf="user; else loading">
 
-  <fg-course-form
-    (submitCourse)="updateCourse($event)"
-    [course]="course"
-    [editing]="true">
-  </fg-course-form>
+  <p>{{user.loginName}}</p>
 
-  <p *ngIf="errorMsg">{{errorMsg}}</p>
+  <p>{{user.lastSeen}}</p>
 
 </div>
 

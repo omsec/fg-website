@@ -20,8 +20,6 @@ export class AuthenticationService {
     // current user wird im local storage gespeichert (falls browser geschlossen wird)
     // https://stackoverflow.com/questions/46915002/argument-of-type-string-null-is-not-assignable-to-parameter-of-type-string
     // entsprechende Abfrage im Guard
-    // this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
-    // ToDo: testen, ob besser geeignet -> auch in authentication.guard & header anpassen
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser') || JSON.stringify(UserFactory.empty())));
     this.currentUser$ = this.currentUserSubject.asObservable();
@@ -31,23 +29,6 @@ export class AuthenticationService {
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
   }
-
-  // Keine Fehlerbehandlung an dieser Stelle notwendig - wird in der Komponente (Login) gemacht
-  // ToDO: 2x pipe? - scheinbar nicht nötig so
-  /*login(username: string, password: string): Observable<User> {
-    return this.http.post<UserRaw>(
-      `${environment.apiUrl}/login`, { loginName: username, password: password } )
-      .pipe(map(userRaw => UserFactory.fromRaw(userRaw)))
-      .pipe(map(user => {
-          // client persistence
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
-          }
-        ),
-        catchError(this.errorHandler)
-      );
-  }*/
 
   login(username: string, password: string): Observable<User> {
     return this.http.post<UserRaw>(
@@ -64,7 +45,8 @@ export class AuthenticationService {
         )
   }
 
-  // Error Handling zur Sicherheit, falls der Zustand inkonsistent wird (Cookie weg, Current User noch im local storage)
+  // Eigenes Error Handling damit das Menu aktualisiert wird (header component)
+  // falls der Zustand inkonsistent wird (Cookie/Tokens weg, Current User noch im local storage)
   logout(): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/logout`, { responseType: 'text'})
@@ -74,40 +56,47 @@ export class AuthenticationService {
             localStorage.removeItem('currentUser');
             this.currentUserSubject.next(UserFactory.empty());}
           ),
-          catchError(this.errorHandlerLogOut)
+          catchError(error => {
+            localStorage.removeItem('currentUser');
+            // this.currentUserSubject.next(UserFactory.empty()) // nicht nötig, schon closed (error)
+            return throwError(of(null))
+          })
         );
   }
 
-  // ToDO: Error Handling: log-out & set empty User => logout, errorHandler/LogOut-Handler
   refreshToken(): Observable<User> {
     return this.http.post<UserRaw>(
       `${environment.apiUrl}/refresh`, null)
-      .pipe(map(userRaw => UserFactory.fromRaw(userRaw)))
-      .pipe(map(user => {
+      .pipe(
+        map(userRaw => UserFactory.fromRaw(userRaw)),
+        map(user => {
         // client persistence
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
         return user;
-    }));
+        }),
+        catchError(this.errorHandler)
+      );
   }
 
   // let user re-type their passwords in case of increased security needs
   verifyPassword(password: string): Observable<boolean> {
     return this.http.post<any>(
       `${environment.apiUrl}/user/verifyPass`, { loginName: this.currentUserValue.loginName, password })
-        .pipe(map(response => response.granted));
+        .pipe(
+          map(response => response.granted),
+          catchError(this.errorHandler));
   }
 
+  // ToDO: Error Handling (mit Handler-Proc) und Komponente
   changePassword(oldPassword: string, newPassword: string): Observable<boolean> {
     return this.http.post<any>(
       `${environment.apiUrl}/user/changePass`, { loginName: this.currentUserValue.loginName, currentPWD: oldPassword, newPWD: newPassword })
         .pipe(
-          map(() => true), // hack? ;-) just return obs-true, if everything went right, since the service doesn't return data (status only)
-          catchError(err => {return throwError('Please try again later') }));
+          catchError(this.errorHandler));
   }
 
   // may return { id: string } or { api-error (ToDo) }
-  // no additional error handliong required - taken care of by http-error interceptor
   register(user: User): Observable<any> {
     return this.http.post<any>(
       `${environment.apiUrl}/register`, user).pipe(
@@ -128,12 +117,6 @@ export class AuthenticationService {
     .pipe(map(response => response.exists === true))
   }
 
-  // ToDo: in logOut integrieren
-  private errorHandlerLogOut(error: HttpErrorResponse): Observable<any> {
-    localStorage.removeItem('currentUser');
-    // this.currentUserSubject.next(UserFactory.empty()) // nicht nötig, schon closed (error)
-    return throwError(error)
-  }
 
   // Für lokale Fehrlebehandlung (interceptors sind global)
   // hier kann eine benutzerfeundliche Meldung der Fehler-Codes erzeugt werden, Logging etc.

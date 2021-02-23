@@ -87,9 +87,9 @@ export class ChangePasswordComponent implements OnInit {
         // true or undefined
         this.ref.close(pwdChanged);
       },
-      error => {
-        // console.log(error);
-        this.errorMsg = error;
+      errMsg => {
+        console.log(errMsg);
+        this.errorMsg = errMsg;
       });
   }
 

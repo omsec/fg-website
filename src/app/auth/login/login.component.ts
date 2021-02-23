@@ -17,9 +17,6 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false; // Steuerung der Controls im Template
 
-  // ToDO: als Prperty mitgeben (im GUI Button)
-  // returnUrl = ''; // falls die Login-Komponente von einer protected Seite aufgerufen wurde
-
   errorMsg = ''; // Fehlermeldung (text)
 
   constructor(

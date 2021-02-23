@@ -30,6 +30,8 @@ export class CourseShow2Component implements OnInit {
     // used to signal error (returned by catchError from pipe)
     const noData = CourseFactory.empty(this.lookupService);
 
+    // https://stackoverflow.com/questions/54669179/how-to-subscribe-to-observable-whose-input-depends-on-data-from-other-observable
+
     // inhalt dynamisch laden (link auf gleiche Route/Component)
     this.route.paramMap.subscribe(params => {
       let currentId = params.get('id');

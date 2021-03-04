@@ -4,17 +4,20 @@
   <div class="card content">
     <form [formGroup]="form">
       <div class="p-fluid p-formgrid p-grid">
-        <div class="p-field p-col-1">
-          <p-dropdown
-            inputId="game"
-            formControlName="gameCode"
-            [options]="game.values"
+        <div class="p-field p-col-3">
+          <p-multiSelect
+            id="series"
+            formControlName="seriesCodes"
+            [options]="series.values"
             optionLabel="textEN"
             optionValue="lookupValue"
-            optionDisabled="disabled">
-          </p-dropdown>
+            optionDisabled="disabled"
+            [ngClass]="{ 'ng-invalid ng-dirty': frm.seriesCodes.errors }"
+            (onChange)="searchHandler()">
+        </p-multiSelect>
+        <small *ngIf="frm.seriesCodes.value.length == 0" class="p-invalid">Chose your series</small>
         </div>
-        <div class="p-field p-col-11 p-md-10">
+        <div class="p-field p-col-9 p-md-9">
           <!-- ToDo: NGprime hat ein Search Control-->
           <input
             id="search"

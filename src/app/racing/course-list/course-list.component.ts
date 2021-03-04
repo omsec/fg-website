@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, startWith, switchMap } from 'rxjs/operators';
-import { CourseListItem, CourseSearch } from 'src/app/models/course';
+import { CourseListItem, CourseSearch, CourseSearchMode } from 'src/app/models/course';
 import { Lookup } from 'src/app/models/lookup';
-import { LookupTypes } from 'src/app/models/lookup-values';
+import { Game, LookupTypes, Series } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { LookupService } from 'src/app/services/lookup.service';
@@ -24,7 +24,7 @@ export class CourseListComponent implements OnInit {
   form!: FormGroup;
   // Code Look-up
   lookups: Lookup[] = [];
-  game!: Lookup;
+  series!: Lookup; // multi-select
 
   constructor(
     private route: ActivatedRoute, // für lookups via Resolver
@@ -35,7 +35,7 @@ export class CourseListComponent implements OnInit {
 
   ngOnInit(): void {
     this.lookups = this.route.snapshot.data.lookups;
-    this.game = this.lookupService.getOptions(this.lookups, LookupTypes.Game, true); // incl. disables (FH5) for testing
+    this.series = this.lookupService.getOptions(this.lookups, LookupTypes.Series, false);
 
     // benutzt für die fehlerbehandlung
     // service-subscription liefert dann ein leeres observable
@@ -44,12 +44,14 @@ export class CourseListComponent implements OnInit {
     // Eingabe-Boxen (Frrmularmodell)
     this.form = this.formBuilder.group({
       //gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
-      gameCode: [this.lookupService.getDefault(LookupTypes.Game)],
+      seriesCodes: [[Series.Road, Series.Dirt, Series.Cross], Validators.required], // ToDo: ALL
       searchTerm: ['']
     });
 
     const initialSearch: CourseSearch = {
-      gameText: this.lookupService.getText(this.game, this.frm.gameCode.value), // FH4, default set in form's model
+      searchMode: CourseSearchMode.Custom,
+      gameCode: Game.FH4,
+      seriesCodes: [Series.Road, Series.Dirt, Series.Cross], // all
       searchTerm: ''
     }
 
@@ -91,9 +93,14 @@ export class CourseListComponent implements OnInit {
   // "Adapter" Methode führt die beiden Suchfelder zusammen
   searchHandler() {
 
+    if (this.frm.seriesCodes.value.length == 0) {
+      return
+    }
+
     const srch: CourseSearch = {
-      gameText: this.lookupService.getText(this.game, this.frm.gameCode.value),
-      // ToDO: Search Mode - custom vs std/all (API = both currently)
+      searchMode: CourseSearchMode.Custom,
+      gameCode: Game.FH4,
+      seriesCodes: this.frm.seriesCodes.value,
       searchTerm: this.frm.searchTerm.value
     };
 

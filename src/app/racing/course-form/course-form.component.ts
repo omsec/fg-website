@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
-import { Course, CourseListItem, CourseRef, CourseSearch } from 'src/app/models/course';
+import { Course, CourseListItem, CourseRef, CourseSearch, CourseSearchMode } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { Lookup } from 'src/app/models/lookup';
-import { LookupTypes } from 'src/app/models/lookup-values';
+import { Game, LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { LookupService } from 'src/app/services/lookup.service';
@@ -144,8 +144,11 @@ export class CourseFormComponent implements OnInit, OnChanges {
   }
 
   searchRoute(event: any) {
+    const seriesCode: number[] = [this.frm.seriesCode.value];
     let search: CourseSearch = {
-      gameText: this.frm.gameCode.value,
+      searchMode: CourseSearchMode.Standard,
+      gameCode: Game.FH4,
+      seriesCodes: seriesCode,
       searchTerm: event.query
     };
     this.routes$.next(search);

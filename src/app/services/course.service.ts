@@ -7,7 +7,7 @@ import { retry, map, catchError, delay } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 import { CourseListItemRaw, CourseRaw } from '../models/course-raw';
-import { CourseListItem, Course, CourseSearch } from '../models/course';
+import { CourseListItem, Course, CourseSearch, CourseSearchMode } from '../models/course';
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
 import { AuthenticationService } from './authentication.service';
 import { UserRole } from '../models/lookup-values';
@@ -24,11 +24,18 @@ export class CourseService {
   getAll(searchSpecs: CourseSearch): Observable<CourseListItem[]> {
     const noData: CourseListItem[] = [];
 
+    let seriesStr: string[] = [];
+    searchSpecs.seriesCodes.map(seriesCode => {
+      seriesStr.push(seriesCode.toString());
+    });
+
     // GET hat kein BODY, daher Query Params
-    // http://localhost:3000/courses?game=fh5&search=roger
+    // http://localhost:3000/courses?game=0&series=0,&series=2&search=test
     const params = new HttpParams({
       fromObject: {
-        game: searchSpecs.gameText,
+        searchMode: searchSpecs.searchMode.toString(),
+        game: searchSpecs.gameCode.toString(),
+        series: seriesStr,
         search: searchSpecs.searchTerm
       }
     });

@@ -44,6 +44,14 @@ export interface CourseListItem {
 // not sent to the API directly, it's used inside this app
 // to pass search-criteria to the service which then converts it into http-params
 export interface CourseSearch {
-  gameText: string;
+  searchMode: CourseSearchMode;
+  gameCode: number;
+  seriesCodes: number[];
   searchTerm: string;
+}
+
+export enum CourseSearchMode {
+  All,
+  Standard,
+  Custom
 }

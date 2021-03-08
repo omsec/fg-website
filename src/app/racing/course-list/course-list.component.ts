@@ -44,15 +44,15 @@ export class CourseListComponent implements OnInit {
     // Eingabe-Boxen (Frrmularmodell)
     this.form = this.formBuilder.group({
       //gameCode: [this.lookupService.getDefaultValue(this.game), Validators.required],
-      seriesCodes: [[Series.Road, Series.Dirt, Series.Cross], Validators.required], // ToDo: ALL
+      seriesCodes: [[Series.Road, Series.Dirt, Series.Cross], Validators.required], // all
       searchTerm: ['']
     });
 
     const initialSearch: CourseSearch = {
       searchMode: CourseSearchMode.Custom,
       gameCode: Game.FH4,
-      seriesCodes: [Series.Road, Series.Dirt, Series.Cross], // all
-      searchTerm: ''
+      seriesCodes: this.frm.seriesCodes.value,
+      searchTerm: this.frm.searchTerm.value
     }
 
     this.courses$ = this.search$?.pipe(

@@ -9,6 +9,8 @@ export interface Course {
   GameText?: string;
   typeCode: number;
   typeText?: string;
+  styleCode: number;
+  styleText?: string;
   forzaSharing: number;
   name: string;
   seriesCode: number;
@@ -16,6 +18,7 @@ export interface Course {
   carClassesCode: number[];
   carClassesText?: string[];
   route?: CourseRef;
+  tags?:[];
 }
 
 // nested course reference
@@ -37,6 +40,8 @@ export interface CourseListItem {
   forzaSharing: number;
   seriesCode: number;
   seriesText: string;
+  styleCode: number;
+  styleText: string;
   carClassesCode: number[];
   carClassesText: string[];
 }

@@ -14,7 +14,7 @@
           optionDisabled="disabled">
         </p-dropdown>
       </div>
-      <div class="p-field p-col-11 p-md-11">
+      <div class="p-field p-col-11 p-md-8">
         <label for="courseName">Route Name</label>
         <input
           id="courseName"
@@ -22,6 +22,17 @@
           type="text" pInputText
           [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.name.errors }">
           <small *ngIf="submitted && frm.name.errors" class="p-invalid">Route Name is required</small>
+      </div>
+      <div class="p-field p-col-2 p-md-2">
+        <label for="routeStyle">Label needed :-/</label>
+        <p-selectButton
+          id="routeStyle"
+          formControlName="styleCode"
+          [options]="style.values"
+          optionLabel="textEN"
+          optionValue="lookupValue"
+          optionDisabled="disabled">
+        </p-selectButton>
       </div>
 
       <div class="p-field p-col-4">
@@ -88,6 +99,14 @@
           [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.name.errors }">
         </p-autoComplete>
         <small *ngIf="submitted && frm.name.errors" class="p-invalid">Route Name is required</small>
+      </div>
+
+      <div class="p-field p-col-6 p-md-6">
+        <label for="tags">Try to categeorize</label>
+        <p-chips
+          id="chips"
+          formControlName="tags">
+        </p-chips>
       </div>
 
     </div>

@@ -1,7 +1,7 @@
 import { CourseRaw, CourseListItemRaw } from './course-raw';
 import { Course, CourseListItem } from './course';
 import { MetainfoFactory } from './metainfo-factory';
-import { CarClass, CourseType, Game, LookupTypes, Series, Visibility } from './lookup-values';
+import { LookupTypes } from './lookup-values';
 import { LookupService } from '../services/lookup.service';
 
 export class CourseFactory {
@@ -20,6 +20,7 @@ export class CourseFactory {
       visibilityCode: lookupService.getDefault(LookupTypes.Visibility),
       gameCode: lookupService.getDefault(LookupTypes.Game),
       typeCode: lookupService.getDefault(LookupTypes.CourseType),
+      styleCode: lookupService.getDefault(LookupTypes.CourseStyle),
       forzaSharing: 100000000,
       name: '',
       seriesCode: lookupService.getDefault(LookupTypes.Series),

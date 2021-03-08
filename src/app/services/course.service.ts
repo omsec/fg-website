@@ -29,8 +29,8 @@ export class CourseService {
       seriesStr.push(seriesCode.toString());
     });
 
-    // GET hat kein BODY, daher Query Params
-    // http://localhost:3000/courses?game=0&series=0,&series=2&search=test
+    // GET hat kein BODY, daher Query Params; Wiederholungen für Array (series)
+    // http://localhost:3000/courses?searchMode=2&game=0&series=0&series=2&search=test
     const params = new HttpParams({
       fromObject: {
         searchMode: searchSpecs.searchMode.toString(),

@@ -6,6 +6,7 @@ export enum LookupTypes {
   Game = 'game',
   Visibility = 'visibility',
   CourseType = 'course type',
+  CourseStyle = 'course style',
   Series = 'series',
   CarClass = 'car class'
 }
@@ -37,6 +38,11 @@ export enum Visibility {
 export enum CourseType {
   Standard,
   Community
+}
+
+export enum CourseStyle {
+  Circuit,
+  Sprint
 }
 
 export enum Series {

@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 import { Course, CourseListItem, CourseRef, CourseSearch, CourseSearchMode } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { Lookup } from 'src/app/models/lookup';
-import { Game, LookupTypes } from 'src/app/models/lookup-values';
+import { CourseStyle, Game, LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { LookupService } from 'src/app/services/lookup.service';
@@ -39,6 +39,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
   game!: Lookup;
   type!: Lookup;
   series!: Lookup;
+  style!: Lookup;
   carClasses!: Lookup; // options, multi-select
 
   routes: CourseListItem[] = [];
@@ -74,6 +75,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
     this.visibility = this.lookupService.getOptions(this.lookups, LookupTypes.Visibility, false);
     this.game = this.lookupService.getOptions(this.lookups, LookupTypes.Game, false);
     this.series = this.lookupService.getOptions(this.lookups, LookupTypes.Series, false);
+    this.style = this.lookupService.getOptions(this.lookups, LookupTypes.CourseStyle, false);
     this.carClasses = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
 
     // type-ahead
@@ -87,8 +89,6 @@ export class CourseFormComponent implements OnInit, OnChanges {
       );
 
     // Formularmodell
-     // ToDo: GetDefault muss hier ein Array von Zahlen liefern für multi-select [3] oder [3, 1] ...
-     // noch besser: Im Model initialisieren, empty?
     this.form = this.formBuilder.group({
       visibilityCode: [this.course.visibilityCode, Validators.required],
       gameCode: [this.course.gameCode, Validators.required],
@@ -97,9 +97,11 @@ export class CourseFormComponent implements OnInit, OnChanges {
         forzaSharing: [null as unknown as number, [Validators.required, Validators.min(100000000), Validators.max(999999999)]],
       name: ['', Validators.required],
       seriesCode: [this.course.seriesCode, Validators.required],
+      styleCode: [this.course.styleCode, Validators.required],
       carClassesCode: [this.course.carClassesCode, Validators.required],
       // carClassesCode: [null, Validators.required], // multiselection kann leer gelassen werden
-      route: [null, Validators.required] // type: Course
+      route: [null, Validators.required], // type: Course
+      tags: [[] as string[]]
     });
   }
 
@@ -132,6 +134,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
     course.forzaSharing = this.frm.forzaSharing.value;
     course.name = this.frm.name.value;
     course.seriesCode = this.frm.seriesCode.value;
+    course.styleCode = this.frm.styleCode.value;
     course.carClassesCode = this.frm.carClassesCode.value;
     // könnte auch in der Factory erstellt werden
     let route: CourseRef = {
@@ -139,6 +142,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
       name: this.frm.route.value.name
     }
     course.route = route;
+    course.tags = this.frm.tags.value;
 
     this.submitCourse.emit(course);
   }

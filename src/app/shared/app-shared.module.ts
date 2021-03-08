@@ -18,6 +18,8 @@ import { ToastModule } from 'primeng/toast';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ChipsModule } from 'primeng/chips';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules)
 
@@ -41,7 +43,9 @@ import { CheckboxModule } from 'primeng/checkbox';
     ToastModule,
     AutoCompleteModule,
     MultiSelectModule,
-    CheckboxModule
+    CheckboxModule,
+    SelectButtonModule,
+    ChipsModule
   ],
   exports: [
     CommonModule,
@@ -61,7 +65,9 @@ import { CheckboxModule } from 'primeng/checkbox';
     ToastModule,
     AutoCompleteModule,
     MultiSelectModule,
-    CheckboxModule
+    CheckboxModule,
+    SelectButtonModule,
+    ChipsModule
   ]
 })
 export class AppSharedModule { }

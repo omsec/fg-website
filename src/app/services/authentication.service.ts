@@ -91,7 +91,8 @@ export class AuthenticationService {
   // ToDO: Error Handling (mit Handler-Proc) und Komponente
   changePassword(oldPassword: string, newPassword: string): Observable<boolean> {
     return this.http.post<any>(
-      `${environment.apiUrl}/user/changePass`, { loginName: this.currentUserValue.loginName, currentPWD: oldPassword, newPWD: newPassword })
+      `${environment.apiUrl}/user/changePass`,
+      { loginName: this.currentUserValue.loginName, currentPWD: oldPassword, newPWD: newPassword })
         .pipe(
           catchError(this.errorHandler));
   }
@@ -107,13 +108,13 @@ export class AuthenticationService {
 
   // used for validation of new accounts
   existsUserName(userName: string): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/user/exists`, { loginName: userName })
+    return this.http.post<any>(`${environment.apiUrl}/users/exists`, { loginName: userName })
     .pipe(map(response => response.exists === true))
   }
 
   // used for validation of new accounts
   existsEMailAddress(eMailAddress: string): Observable<boolean> {
-    return this.http.post<any>(`${environment.apiUrl}/email/exists`, { eMailAddress })
+    return this.http.post<any>(`${environment.apiUrl}/emails/exists`, { eMailAddress })
     .pipe(map(response => response.exists === true))
   }
 

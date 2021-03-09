@@ -77,13 +77,13 @@ export class CourseService {
   // may return { id: string } or { api-error }
   add(course: Course): Observable<any> {
     return this.http.post<any>(
-      `${environment.apiUrl}/course/add`, course)
+      `${environment.apiUrl}/courses`, course)
         .pipe(catchError(this.errorHandler))
   }
 
   update(course: Course): Observable<any> {
     return this.http.put(
-      `${environment.apiUrl}/course/edit/${course.id}`,
+      `${environment.apiUrl}/courses/${course.id}`,
       course, // course im Body übergeben
       // { responseType: 'text'} // zerstört error handling!!
     ).pipe(catchError(this.errorHandler))

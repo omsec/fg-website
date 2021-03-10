@@ -26,6 +26,10 @@ export class CourseListComponent implements OnInit {
   lookups: Lookup[] = [];
   series!: Lookup; // multi-select
 
+  // paginating
+  first = 0; // ..of the current page, starting at 0
+  pageSize = 5;
+
   constructor(
     private route: ActivatedRoute, // für lookups via Resolver
     private lookupService: LookupService,
@@ -108,6 +112,16 @@ export class CourseListComponent implements OnInit {
 
     // console.log(this.lookupService.getText(this.game, this.frm.gameCode.value));
     // console.log(srch);
+  }
+
+  onPageChange(event: any) {
+    //event.first = Index of the first record
+    //event.rows = Number of rows to display in new page
+    //event.page = Index of the new page
+    //event.pageCount = Total number of pages
+
+    this.first = event.first;
+    this.pageSize = event.rows;
   }
 
 }

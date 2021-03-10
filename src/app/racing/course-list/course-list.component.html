@@ -40,9 +40,13 @@
   <!-- content shown if data is present -->
   <ng-container *ngIf="courses.length>0">
     <h5>Table / Static Title</h5>
-    <ul *ngFor="let course of courses">
+
+    <ul *ngFor="let course of courses | slice: first : first + pageSize">
       <li><a [routerLink]="['routes', course.id]">{{ course.name }}</a></li>
     </ul>
+
+    <p-paginator [rows]="pageSize" [totalRecords]="courses.length" (onPageChange)="onPageChange($event)"></p-paginator>
+
   </ng-container>
 
   <!-- content shown if no data is present (no error) -->

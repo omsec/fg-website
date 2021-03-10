@@ -54,6 +54,8 @@ intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEven
     );
   }
 
+  // ToDo: Wird eventuell doch gestrichen (Aufwand doppelte Texte)
+  // und auf dem Server in User-Sprache "lesbar" erzeugt
   formatErrorMessage(error: any): string {
     let msg = '';
 

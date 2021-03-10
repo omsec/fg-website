@@ -5,7 +5,12 @@
   <p>Created by {{course.metaInfo.createdName}}</p>
   <p>Created at {{course.metaInfo.createdTS}}</p> <!-- format pipe-->
 
+  <p>Last modified by {{course.metaInfo.modifiedName}}</p>
+  <p>Last modified at {{course.metaInfo.modifiedTS}}</p> <!-- format pipe, evtl. null = "never"-->
+
   <p>can modify: {{canModify}}</p>
+
+  <p>RecVer: {{course.metaInfo.recVer}}</p>
 
   <p *ngIf="course.route">
     based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>

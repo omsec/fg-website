@@ -20,6 +20,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
+import { PaginatorModule } from 'primeng/paginator';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules)
 
@@ -45,7 +46,8 @@ import { ChipsModule } from 'primeng/chips';
     MultiSelectModule,
     CheckboxModule,
     SelectButtonModule,
-    ChipsModule
+    ChipsModule,
+    PaginatorModule
   ],
   exports: [
     CommonModule,
@@ -67,7 +69,8 @@ import { ChipsModule } from 'primeng/chips';
     MultiSelectModule,
     CheckboxModule,
     SelectButtonModule,
-    ChipsModule
+    ChipsModule,
+    PaginatorModule
   ]
 })
 export class AppSharedModule { }

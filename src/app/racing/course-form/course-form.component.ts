@@ -125,6 +125,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
 
     if (this.editing) {
       course.id = this.course?.id;
+      course.metaInfo.recVer = this.course.metaInfo.recVer; // return original recVer (optimistic locking)
       course.metaInfo.modifiedID = this.auth.currentUserValue.id;
     } else {
       course.metaInfo.createdID = this.auth.currentUserValue.id

@@ -39,8 +39,14 @@ export class CourseService {
         search: searchSpecs.searchTerm
       }
     });
+    let url = 'public';
+    // initialisiert vom auth-Service mit empty()
+    if (this.authenticationService.currentUserValue.loginName != '') {
+      url = 'member'
+    }
+
     return this.http.get<CourseListItemRaw[]>(
-      `${environment.apiUrl}/courses`, { params })
+      `${environment.apiUrl}/courses/` + url, { params })
       .pipe(
         // delay(1000), // test loading/error screen
         retry(1),
@@ -57,8 +63,16 @@ export class CourseService {
   }
 
   getSingle(courseId: string): Observable<Course> {
+
+    let url = 'public';
+    // initialisiert vom auth-Service mit empty()
+    if (this.authenticationService.currentUserValue.loginName != '') {
+      url = 'member'
+    }
+
     return this.http.get<CourseRaw>(
-      `${environment.apiUrl}/courses/${courseId}`)
+      //`${environment.apiUrl}/courses/${courseId}`)
+      `${environment.apiUrl}/courses/` + url + `/${courseId}`)
       .pipe(
         delay(1000), // testing loading/error in template :-)
         retry(1),

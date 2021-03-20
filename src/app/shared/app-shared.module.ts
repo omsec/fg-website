@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { EnvPipe } from '../pipes/env.pipe';
+
 import { SharedModule } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,10 +24,12 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
 import { PaginatorModule } from 'primeng/paginator';
 
-// ToDo: mit Variablen gemäss Buch (Kap Modules)
+// ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    EnvPipe
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -52,6 +56,7 @@ import { PaginatorModule } from 'primeng/paginator';
   exports: [
     CommonModule,
     ReactiveFormsModule,
+    EnvPipe,
     SharedModule,
     MenubarModule,
     InputTextModule,

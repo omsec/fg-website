@@ -21,6 +21,10 @@
     {{course.carClassesText}}
   </p>
 
+  <p *ngIf="visits>-1">{{visits}} views.</p>
+
+  <p>Map {{ 'imgUrl' | env }}</p>
+
   <hr>
   <!-- ist disabled immer noch klickbar -->
   <!-- https://forum.primefaces.org/viewtopic.php?t=59008 -->

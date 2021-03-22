@@ -37,10 +37,21 @@
   </p-button>
   -->
 
+  <!-- ToDo: DIV/Design etc.-->
   <button
     pButton
     label="modify"
     [routerLink]="['/routes/edit', courseId]"
+    [disabled]=!canModify>
+  </button>
+
+  <hr>
+
+  <!-- "showControlPanel" Button/Link to other Page/Component (Stats, etc.)-->
+  <button
+    pButton
+    label="info"
+    [routerLink]="['/analytics/visitors', courseId]"
     [disabled]=!canModify>
   </button>
 

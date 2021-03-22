@@ -24,9 +24,6 @@ export class CourseShow2Component implements OnInit {
     private lookupService: LookupService) { } // ToDo: behelfsmässig eingefügt
 
   ngOnInit(): void {
-    // ToDO: Dynamisch machen
-    this.courseId = this.route.snapshot.params.id; // gemäss app.routing
-
     // used to signal error (returned by catchError from pipe)
     const noData = CourseFactory.empty(this.lookupService);
 

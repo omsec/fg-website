@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { retry, map, catchError, delay } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import  { formatDate } from '../helpers/date-helper' // import einzelner funktion(en)
+import { formatDate } from '../helpers/date-helper' // import einzelner funktion(en)
+import { TrackingRaw } from '../models/tracking-raw';
+import { Tracking } from '../models/tracking';
+import { TrackingFactory } from '../models/tracking-factory';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +34,41 @@ export class TrackingService {
         map(res => {
           return res.visits
         }),
-        catchError(this.errorHandler)
+        catchError(error => {
+          // convert any error into "no information signal" (just hide the info in components)
+          console.log(error)
+          return of(-1)
+        })
       );
+  }
+
+  getVisitors(id: string, since: Date): Observable<Tracking[]> {
+
+    const noData: Tracking[] = []
+    const sinceStr = formatDate(since);
+    const params = new HttpParams({
+      fromObject: {
+        id,
+        startDT: sinceStr
+      }
+    });
+
+    // console.log(sinceStr)
+
+    // may return {visits: INT} or API-Error
+    return this.http.get<TrackingRaw[]>(`${environment.apiUrl}/stats/visitors`, { params })
+    .pipe(
+      retry(1),
+      map(visitorsRaw => {
+        // an empty list is null
+        if (visitorsRaw) {
+          return visitorsRaw.map(visitorRaw => TrackingFactory.fromRaw(visitorRaw));
+        } else {
+          return noData; // empty list ist NOT an error
+        }
+      }),
+      catchError(this.errorHandler)
+    );
   }
 
   // Für lokale Fehrlebehandlung von "Spezialfällen"

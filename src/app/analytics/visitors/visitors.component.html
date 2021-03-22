@@ -1,0 +1,32 @@
+<p>static Text</p>
+
+
+<ng-container *ngIf="visitors$ | async as visitors; else loading">
+
+  <!-- content shown if loaded correctly -->
+  <ng-container *ngIf="errorMsg==''">
+
+    <!-- content shown if data is present -->
+    <ng-container *ngIf="visitors.length>0; else noData">
+      <h5>Table / Static Title</h5>
+
+      <ul *ngFor="let visitor of visitors">
+        <li>{{ visitor.userName}} at {{visitor.visitTS | date: 'medium' }}</li>
+      </ul>
+
+    </ng-container>
+    <ng-template #noData>
+      <p>No visitors in selected period.</p>
+    </ng-template>
+
+  </ng-container>
+
+  <!-- hier wird alles als error behandelt, auch 204-->
+  <p *ngIf="errorMsg!=''">{{ errorMsg }}</p>
+
+</ng-container>
+
+<ng-template #loading>
+  <!-- global css class-->
+  <p-progressSpinner class="content" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+</ng-template>

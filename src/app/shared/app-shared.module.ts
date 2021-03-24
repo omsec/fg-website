@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { ForzasharePipe } from '../pipes/forzashare.pipe'
 import { EnvPipe } from '../pipes/env.pipe';
 
 import { SharedModule } from 'primeng/api';
@@ -22,12 +23,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
-import { PaginatorModule } from 'primeng/paginator';
+//import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
 @NgModule({
   declarations: [
+    ForzasharePipe,
     EnvPipe
   ],
   imports: [
@@ -51,11 +54,13 @@ import { PaginatorModule } from 'primeng/paginator';
     CheckboxModule,
     SelectButtonModule,
     ChipsModule,
-    PaginatorModule
+    //PaginatorModule,
+    TableModule
   ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
+    ForzasharePipe,
     EnvPipe,
     SharedModule,
     MenubarModule,
@@ -75,7 +80,8 @@ import { PaginatorModule } from 'primeng/paginator';
     CheckboxModule,
     SelectButtonModule,
     ChipsModule,
-    PaginatorModule
+    //PaginatorModule,
+    TableModule
   ]
 })
 export class AppSharedModule { }

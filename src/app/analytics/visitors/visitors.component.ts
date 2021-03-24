@@ -24,24 +24,20 @@ export class VisitorsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // used to signal error (returned by catchError from pipe)
-    // const noData = TrackingFactory.empty
-
-// inhalt dynamisch laden (link auf gleiche Route/Component)
-this.route.paramMap.subscribe(params => {
-  let currentId = params.get('id');
-  if (currentId) {
-    this.profileId = currentId;
-    this.visitors$ = this.trackingService.getVisitors(this.profileId, environment.releaseDate) // später ein Control/Form für das Datum
-      .pipe(
-        catchError(err => {
-          // console.log(err);
-          this.errorMsg = err;
-          return of([])
-        })
-      );
+    // inhalt dynamisch laden (link auf gleiche Route/Component)
+    this.route.paramMap.subscribe(params => {
+      let currentId = params.get('id');
+      if (currentId) {
+        this.profileId = currentId;
+        this.visitors$ = this.trackingService.getVisitors(this.profileId, environment.releaseDate) // später ein Control/Form für das Datum
+          .pipe(
+            catchError(err => {
+              // console.log(err);
+              this.errorMsg = err;
+              return of([])
+            })
+          );
+      }
+    });
   }
-});
-  }
-
 }

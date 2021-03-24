@@ -41,11 +41,38 @@
   <ng-container *ngIf="courses.length>0">
     <h5>Table / Static Title</h5>
 
+    <!-- https://www.codeusingjava.com/angular/primeng/prime7 -->
+    <p-table
+      [value]="courses"
+      [paginator]="true"
+      [rows]="10"
+      [totalRecords]="courses.length"
+      >
+      <ng-template pTemplate="header">
+        <tr>
+            <th>Series</th>
+            <th>Name</th>
+            <th>Creator</th>
+            <th>Share Code</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-course>
+        <tr>
+            <td>{{course.seriesText}}</td>
+            <td><a [routerLink]="['routes', course.id]">{{ course.name }}</a></td>
+            <td>{{course.createdName}}</td>
+            <td>{{course.forzaSharing | forzashare}}</td>
+        </tr>
+    </ng-template>
+    </p-table>
+
+    <!--
     <ul *ngFor="let course of courses | slice: first : first + pageSize">
       <li><a [routerLink]="['routes', course.id]">{{ course.name }}</a></li>
     </ul>
 
     <p-paginator [rows]="pageSize" [totalRecords]="courses.length" (onPageChange)="onPageChange($event)"></p-paginator>
+    -->
 
   </ng-container>
 

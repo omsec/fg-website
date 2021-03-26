@@ -17,6 +17,7 @@ export interface CourseRaw {
   seriesText?: string;
   carClassesCode: number[];
   carClassesText?: string[];
+  description?: string;
   route?: CourseRefRaw;
   tags?:[];
 }

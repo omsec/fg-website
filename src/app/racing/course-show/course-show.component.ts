@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Course } from 'src/app/models/course';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { TrackingService } from 'src/app/services/tracking.service';
 import { environment } from '../../../environments/environment';
@@ -17,15 +18,22 @@ export class CourseShowComponent implements OnInit {
   errorMsg = ''; // '' = loading, sonst default TExt
   canModify = false;
   visits = 0;
+  // falls der aktuelle User benötigt würde, auth-Service privat importieren
+  // und in ngInit als ersten initialisieren
+  // rechte-steuerung soll aber möglichst über den Service erfolgen (canMody, showControl panel etc.)
+  currentUserId = '';
 
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
+    private authenticationService: AuthenticationService
   ) { }
 
 
   ngOnInit(): void {
+
+    this.currentUserId = this.authenticationService.currentUserValue.id;
 
     // inhalt dynamisch laden (link auf gleiche Route/Component)
     this.route.paramMap.subscribe(params => {

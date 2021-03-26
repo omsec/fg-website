@@ -17,6 +17,7 @@ export interface Course {
   seriesText?: string;
   carClassesCode: number[];
   carClassesText?: string[];
+  description?: string;
   route?: CourseRef;
   tags?:[];
 }

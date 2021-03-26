@@ -1,59 +1,147 @@
+<!-- https://www.primefaces.org/primeng/showcase/#/primeflex/grid -->
+
 <div *ngIf="course; else loading">
 
-  <p>{{course.name}}</p>
-  <p>{{course.seriesText}}</p>
-  <p>Created by {{course.metaInfo.createdName}}</p>
-  <p>Created at {{course.metaInfo.createdTS}}</p> <!-- format pipe-->
+  <div class="card content" style="max-width: 1200px;"> <!-- widtrh begrenzen? -->
 
-  <p>Last modified by {{course.metaInfo.modifiedName}}</p>
-  <p>Last modified at {{course.metaInfo.modifiedTS}}</p> <!-- format pipe, evtl. null = "never"-->
+    <!--
+    <div class="p-grid p-jc-center p-text-center">
+      <div class="p-col-6">
+          <img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
+          <img class="rounded right" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
+          <img class="rounded right" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track"> ToDo: auf Iphones nicht mehr zentriert!
+      </div>
+    </div>
+    -->
 
-  <p>can modify: {{canModify}}</p>
+    <div class="p-grid p-jc-center p-text-center">
+      <!--
+      https://www.primefaces.org/primeng/showcase/#/primeflex/grid
+      responsive
+      p-col-* bezieht sich auf das kleinste Gerät (Handy) - dann Tablets, dann PC
+      -->
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track"></div>
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track"></div>
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track"></div>
+    </div>
 
-  <p>RecVer: {{course.metaInfo.recVer}}</p>
+    <div class="p-grid p-jc-center p-text-center">
+      <div class="p-col-12">
+        <p class="forzaShare">{{ course.forzaSharing | forzashare }}</p>
+      </div>
+    </div>
 
-  <p *ngIf="course.route">
-    based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
-  </p>
+    <div class="p-grid">
+      <div class="p-col-12 p-mb-3 demo-container">
+        <!-- links style, evtl. als fenster-->
+        <h3><p>{{ course.name }}</p></h3>
+      </div>
+    </div>
 
-  <p *ngIf="course.carClassesText">
-    Car Classes:
-    {{course.carClassesText}}
-  </p>
+    <div class="p-grid">
+      <div class="p-col-6">
+        <p><a [routerLink]="['/users/users', course.metaInfo.createdID]">{{ course.metaInfo.createdName }}</a></p>
+      </div>
+      <div class="p-col-6 p-text-right">
+        <p>Rating Component</p>
+      </div>
+    </div>
 
-  <p *ngIf="visits>-1">{{visits}} views.</p>
+    <!-- nested -->
+    <div class="p-grid">
+      <div class="p-col-10">
+        <div class="p-grid">
+          <div *ngIf="course.description" class="p-col-10">
+            <p-fieldset legend="Info" [toggleable]="true">
+              {{course.description}}
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-2 p-text-right">
+        <div class="box">
+            <img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
+        </div>
+        <div class="box">
+          <img class="rounded" style="margin-top: 0.25rem" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
+        </div>
+      </div>
+    </div>
 
-  <p>Map {{ 'imgUrl' | env }}</p>
+    <div class="p-grid">
+      <!-- https://www.primefaces.org/primeng/showcase/#/tag -->
+      <div *ngFor="let carClass of course.carClassesText" class="p-col-3 p-md-2 p-lg-1">
+          <p-tag [value]="carClass"></p-tag>
 
-  <hr>
-  <!-- ist disabled immer noch klickbar -->
-  <!-- https://forum.primefaces.org/viewtopic.php?t=59008 -->
-  <!--
-  <p-button
-    type="button"
-    label="modify"
-    [routerLink]="['/routes/edit', courseId]"
-    [disabled]=readOnly>
-  </p-button>
-  -->
+      </div>
+    </div>
 
-  <!-- ToDo: DIV/Design etc.-->
-  <button
-    pButton
-    label="modify"
-    [routerLink]="['/routes/edit', courseId]"
-    [disabled]=!canModify>
-  </button>
+    <div class="p-grid">
+      <div class="p-col-12">
+        <p>Screenshots (Galleria)</p>
+      </div>
+    </div>
 
-  <hr>
+    <div class="p-grid">
+      <!-- https://www.primefaces.org/primeng/showcase/#/tag -->
+      <div class="p-col-12">
+        Tags
+      </div>
+    </div>
 
-  <!-- "showControlPanel" Button/Link to other Page/Component (Stats, etc.)-->
-  <button
-    pButton
-    label="info"
-    [routerLink]="['/analytics/visitors', courseId]"
-    [disabled]=!canModify>
-  </button>
+    <div class="p-grid">
+      <div class="p-col-12">
+        <p>Comments</p>
+      </div>
+    </div>
+
+    <div *ngIf="canModify" class="p-grid">
+      <div class="p-col-12">
+        <p-fieldset legend="Control Panel" [toggleable]="true">
+          <div class="p-grid">
+            <!-- evtl. alle direkt nebeneinander in einer 12er-col mit margin-left -->
+            <!-- so passt es nicht schön auf iPhones -->
+            <div class="p-col">
+              <button
+                pButton
+                label="stats"
+                [routerLink]="['/analytics/visitors', courseId]"
+                [disabled]=!canModify
+                style="margin-right: 0.5rem;">
+              </button>
+
+              <button
+                pButton
+                label="modify"
+                [routerLink]="['/routes/edit', courseId]"
+                [disabled]=!canModify
+                style="margin-right: 0.5rem;">
+              </button>
+
+              <button
+                pButton
+                label="delete"
+                [routerLink]="['/routes/edit', courseId]"
+                [disabled]=!canModify
+                class="p-button-danger">
+              </button>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+
+    <!--
+    counter will be -1 if analytics is disabled on the server
+    since we don't want to show wrong information to viewers.
+    -->
+    <div *ngIf="visits>1" class="p-grid">
+      <div class="p-col-12">
+        <p>{{visits}} views.</p>
+      </div>
+    </div>
+
+  </div>
 
 </div>
 

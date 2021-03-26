@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 import { Course, CourseListItem, CourseRef, CourseSearch, CourseSearchMode } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
 import { Lookup } from 'src/app/models/lookup';
-import { CourseStyle, Game, LookupTypes } from 'src/app/models/lookup-values';
+import { Game, LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { LookupService } from 'src/app/services/lookup.service';
@@ -100,6 +100,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
       styleCode: [this.course.styleCode, Validators.required],
       carClassesCode: [this.course.carClassesCode, Validators.required],
       // carClassesCode: [null, Validators.required], // multiselection kann leer gelassen werden
+      description: [''],
       route: [null, Validators.required], // type: Course
       tags: [[] as string[]]
     });
@@ -137,6 +138,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
     course.seriesCode = this.frm.seriesCode.value;
     course.styleCode = this.frm.styleCode.value;
     course.carClassesCode = this.frm.carClassesCode.value;
+    course.description = this.frm.description.value;
     // könnte auch in der Factory erstellt werden
     let route: CourseRef = {
       id: this.frm.route.value.id,

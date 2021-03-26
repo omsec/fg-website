@@ -12,3 +12,23 @@ html, body {
 .content {
   padding: 2rem;
 }
+
+
+/* evtl. in eigene datei auslagern */
+/* https://htmlcolorcodes.com/ */
+
+.forzaShare {
+  color: orangered;
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+/* https://www.w3schools.com/css/css3_borders.asp */
+.rounded {
+  border-radius: 5px;
+}
+
+.right {
+  margin-left:  0.5rem;
+}

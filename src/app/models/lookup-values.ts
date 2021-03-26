@@ -29,6 +29,11 @@ export enum Game {
   FH5
 }
 
+export enum Privacy {
+  UserName,
+  XboxTag
+}
+
 export enum Visibility {
   Public,
   Friends,

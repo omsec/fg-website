@@ -25,6 +25,9 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ChipsModule } from 'primeng/chips';
 //import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FieldsetModule } from 'primeng/fieldset';
+import { TagModule } from 'primeng/tag';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
@@ -55,7 +58,10 @@ import { TableModule } from 'primeng/table';
     SelectButtonModule,
     ChipsModule,
     //PaginatorModule,
-    TableModule
+    TableModule,
+    InputTextareaModule,
+    FieldsetModule,
+    TagModule
   ],
   exports: [
     CommonModule,
@@ -81,7 +87,10 @@ import { TableModule } from 'primeng/table';
     SelectButtonModule,
     ChipsModule,
     //PaginatorModule,
-    TableModule
+    TableModule,
+    InputTextareaModule,
+    FieldsetModule,
+    TagModule
   ]
 })
 export class AppSharedModule { }

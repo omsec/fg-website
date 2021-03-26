@@ -35,6 +35,17 @@
         </p-selectButton>
       </div>
 
+      <div class="p-field p-col-12 p-md-12">
+        <label for="description">Comment</label>
+        <textarea pInputTextarea
+          id="description"
+          formControlName="description"
+          [autoResize]="true"
+          [rows]="5"
+          [cols]="30">
+        </textarea>
+      </div>
+
       <div class="p-field p-col-4">
         <label for="series">Series</label>
         <p-dropdown

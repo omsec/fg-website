@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, map, catchError, delay } from 'rxjs/operators';
+import { retry, map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 
@@ -74,7 +74,7 @@ export class CourseService {
       //`${environment.apiUrl}/courses/${courseId}`)
       `${environment.apiUrl}/courses/` + url + `/${courseId}`)
       .pipe(
-        delay(1000), // testing loading/error in template :-)
+        // delay(1000), // testing loading/error in template :-)
         retry(1),
         map(courseRaw => {
           // check for empty result (204)

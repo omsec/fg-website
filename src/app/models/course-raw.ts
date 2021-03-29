@@ -1,3 +1,4 @@
+import { Lookup } from './lookup';
 import { MetaInfoRaw } from './metainfo-raw';
 
 export interface CourseRaw {
@@ -15,8 +16,7 @@ export interface CourseRaw {
   name: string;
   seriesCode: number;
   seriesText?: string;
-  carClassesCode: number[];
-  carClassesText?: string[];
+  carClassCodes?: Lookup[];
   description?: string;
   route?: CourseRefRaw;
   tags?:[];

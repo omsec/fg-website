@@ -8,18 +8,18 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
-import { Lookup } from '../models/lookup';
+import { LookupType } from '../models/lookup';
 import { LookupService } from '../services/lookup.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LookupResolver implements Resolve<Lookup[]> {
+export class LookupResolver implements Resolve<LookupType[]> {
 
   // constructor hinzugefügt, service injected und return types angepasst
   constructor(private lookupService: LookupService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Lookup[]> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<LookupType[]> {
     return this.lookupService.getLookups();
   }
 }

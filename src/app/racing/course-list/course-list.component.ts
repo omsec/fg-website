@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, startWith, switchMap } from 'rxjs/operators';
 import { CourseListItem, CourseSearch, CourseSearchMode } from 'src/app/models/course';
-import { Lookup } from 'src/app/models/lookup';
+import { LookupType } from 'src/app/models/lookup';
 import { Game, LookupTypes, Series } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
@@ -23,8 +23,8 @@ export class CourseListComponent implements OnInit {
 
   form!: FormGroup;
   // Code Look-up
-  lookups: Lookup[] = [];
-  series!: Lookup; // multi-select
+  lookups: LookupType[] = [];
+  series!: LookupType; // multi-select
 
   // paginating
   first = 0; // ..of the current page, starting at 0

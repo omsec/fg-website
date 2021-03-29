@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { retry, map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -10,7 +10,7 @@ import { CourseListItemRaw, CourseRaw } from '../models/course-raw';
 import { CourseListItem, Course, CourseSearch, CourseSearchMode } from '../models/course';
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
 import { AuthenticationService } from './authentication.service';
-import { UserRole } from '../models/lookup-values';
+import { CarClass, CourseStyle, UserRole } from '../models/lookup-values';
 
 @Injectable({
   providedIn: 'root'
@@ -91,14 +91,31 @@ export class CourseService {
   // may return { id: string } or { api-error }
   add(course: Course): Observable<any> {
     return this.http.post<any>(
-      `${environment.apiUrl}/courses`, course)
-        .pipe(catchError(this.errorHandler))
+      `${environment.apiUrl}/courses`, this.cleanCourse(course))
+        //.pipe(catchError(this.errorHandler))
+        .pipe(
+          // this.cleanCourse(course), ToDO: muss wohl obsverable liefern
+          catchError(this.errorHandler)
+        )
   }
+
+  // Test: clean using custom operator
+  /*
+  addTest(course: Course): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}/courses`, course)
+        //.pipe(catchError(this.errorHandler))
+        .pipe(
+          this.TestFunc(course),
+          catchError(this.errorHandler)
+        )
+  }
+  */
 
   update(course: Course): Observable<any> {
     return this.http.put(
       `${environment.apiUrl}/courses/${course.id}`,
-      course, // course im Body übergeben
+      this.cleanCourse(course), // course im Body übergeben
       // { responseType: 'text'} // zerstört error handling!!
     ).pipe(catchError(this.errorHandler))
   }
@@ -120,6 +137,35 @@ export class CourseService {
         || (this.authenticationService.currentUserValue.id == course.metaInfo.createdID)
     )
   }
+
+  // performs transformation used by .add and .update
+  // ToDo: immutable (entwickler magazin)
+  private cleanCourse(course: Course): Course {
+
+    let c = course // ToDo: (deep) copy?
+
+    // if car class "open" (=all) is found in list, remove other items that may exist
+    // can't use indexOf as this requires an instance of LookupType which may contain i18n (translated) texts
+    if (c.carClassCodes) {
+      let found = false;
+      for (let i = 0; i < c.carClassCodes.length; i++) {
+        if (c.carClassCodes[i].value == CarClass.Open) {
+          found = true;
+          break;
+        }
+      }
+      c.carClassCodes = [{ value: CarClass.Open} ];
+    }
+
+    return { ...c}
+  }
+
+  // Test
+  // https://netbasal.com/creating-custom-operators-in-rxjs-32f052d69457
+  /*
+  private CleanOperator<Course>(course: Course): Observable<Course> {
+  }
+  */
 
   // Für lokale Fehrlebehandlung von "Spezialfällen"
   // bpw. abfangen von "No Data" (204) als Fehlermeldung

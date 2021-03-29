@@ -1,4 +1,4 @@
-export interface Lookup {
+export interface LookupType {
   lookupType: string;
   values: LookupValue[];
 }
@@ -10,4 +10,10 @@ export interface LookupValue {
   indicator: string;
   textEN: string;
   textDE: string;
+}
+
+// nested in models to reference multi-value lookups
+export interface Lookup {
+  value: number;
+  text?: string; // left empty for object creation
 }

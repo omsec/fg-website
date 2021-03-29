@@ -6,7 +6,7 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 
 import { Course, CourseListItem, CourseRef, CourseSearch, CourseSearchMode } from 'src/app/models/course';
 import { CourseFactory } from 'src/app/models/course-factory';
-import { Lookup } from 'src/app/models/lookup';
+import { LookupType } from 'src/app/models/lookup';
 import { Game, LookupTypes } from 'src/app/models/lookup-values';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
@@ -33,14 +33,14 @@ export class CourseFormComponent implements OnInit, OnChanges {
   submitted = false;
 
   // Code Look-up
-  lookups: Lookup[] = []
+  lookups: LookupType[] = []
 
-  visibility!: Lookup;
-  game!: Lookup;
-  type!: Lookup;
-  series!: Lookup;
-  style!: Lookup;
-  carClasses!: Lookup; // options, multi-select
+  visibility!: LookupType;
+  game!: LookupType;
+  type!: LookupType;
+  series!: LookupType;
+  style!: LookupType;
+  carClasses!: LookupType; // options, multi-select
 
   routes: CourseListItem[] = [];
   routes$ = new Subject<CourseSearch>();
@@ -78,6 +78,8 @@ export class CourseFormComponent implements OnInit, OnChanges {
     this.style = this.lookupService.getOptions(this.lookups, LookupTypes.CourseStyle, false);
     this.carClasses = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
 
+    console.log(this.carClasses);
+
     // type-ahead
     this.routes$.asObservable().pipe(
       filter(search => (search.searchTerm == '' || search.searchTerm.length >= 3)),
@@ -98,8 +100,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
       name: ['', Validators.required],
       seriesCode: [this.course.seriesCode, Validators.required],
       styleCode: [this.course.styleCode, Validators.required],
-      carClassesCode: [this.course.carClassesCode, Validators.required],
-      // carClassesCode: [null, Validators.required], // multiselection kann leer gelassen werden
+      carClassCodes: [this.course.carClassCodes, Validators.required], // [] set by factory or actual data
       description: [''],
       route: [null, Validators.required], // type: Course
       tags: [[] as string[]]
@@ -137,7 +138,13 @@ export class CourseFormComponent implements OnInit, OnChanges {
     course.name = this.frm.name.value;
     course.seriesCode = this.frm.seriesCode.value;
     course.styleCode = this.frm.styleCode.value;
-    course.carClassesCode = this.frm.carClassesCode.value;
+    // ToDo: build array of lookup
+    if (this.frm.carClassCodes.value.length > 0) {
+      for (let i = 0; i < this.frm.carClassCodes.value.length; i++) {
+        course.carClassCodes?.push({ value: this.frm.carClassCodes.value[i] });
+      }
+    }
+    //course.carClassCodes = this.frm.carClassCodes.value;
     course.description = this.frm.description.value;
     // könnte auch in der Factory erstellt werden
     let route: CourseRef = {
@@ -148,6 +155,7 @@ export class CourseFormComponent implements OnInit, OnChanges {
     course.tags = this.frm.tags.value;
 
     this.submitCourse.emit(course);
+    console.log(course)
   }
 
   searchRoute(event: any) {

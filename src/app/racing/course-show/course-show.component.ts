@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
 import { TrackingService } from 'src/app/services/tracking.service';
 import { environment } from '../../../environments/environment';
+import { CarClass } from '../../models/lookup-values';
 
 @Component({
   selector: 'fg-course-show',
@@ -22,6 +23,9 @@ export class CourseShowComponent implements OnInit {
   // und in ngInit als ersten initialisieren
   // rechte-steuerung soll aber möglichst über den Service erfolgen (canMody, showControl panel etc.)
   currentUserId = '';
+
+  // look-up symbols used in template
+  CARCLASS = CarClass
 
   constructor(
     private route: ActivatedRoute,

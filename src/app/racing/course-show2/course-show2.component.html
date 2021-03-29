@@ -12,10 +12,12 @@
       based on: <a [routerLink]="['/routes/routes', course.route.id]">{{course.route.name}}</a>
     </p>
 
+    <!-- müsste mit nested ngFor/let gemacht werden
     <p *ngIf="course.carClassesText">
       Car Classes:
       {{course.carClassesText}}
     </p>
+    -->
   </ng-container>
 
   <!-- hier wird alles als error behandelt, auch 204-->

@@ -4,23 +4,23 @@ import { from, Observable, of, throwError } from 'rxjs';
 import { retry, map, catchError, shareReplay, concatMap, exhaustMap, mergeMap, tap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { Lookup, LookupValue } from '../models/lookup';
+import { LookupType, LookupValue } from '../models/lookup';
 import { LookupTypes } from '../models/lookup-values';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LookupService {
-  private lookups: Lookup[] = []
+  private lookups: LookupType[] = []
 
   constructor(private http: HttpClient) { }
 
   // usually called/subscribed by a resolver
-  getLookups(): Observable<Lookup[]> {
+  getLookups(): Observable<LookupType[]> {
     if (this.lookups.length > 0) {
       return of(this.lookups)
     } else  {
-      return this.http.get<Lookup[]>(
+      return this.http.get<LookupType[]>(
         `${environment.apiUrl}/lookups`)
         .pipe(
           retry(3),
@@ -36,8 +36,8 @@ export class LookupService {
 
   // die some-syntax version wäre wohl effizienter auch hier
   // https://stackoverflow.com/questions/12260529/break-statement-in-javascript-array-map-method
-  getOptions(lookupMap: Lookup[], lookupType: LookupTypes, includeDisabled: boolean): Lookup {
-    const options: Lookup = { lookupType, values: [] };
+  getOptions(lookupMap: LookupType[], lookupType: LookupTypes, includeDisabled: boolean): LookupType {
+    const options: LookupType = { lookupType, values: [] };
 
     // ToDo: überlegen
     // PM-Dropdown zeigt immer den ersten Wert an; undef ist wohl nicht vorgesehen
@@ -129,7 +129,7 @@ export class LookupService {
   */
 
   // get the text of a given type/value
-  getText(lookup: Lookup, value: number): string {
+  getText(lookup: LookupType, value: number): string {
     let str = '';
 
     // map kann nicht abgebrochen werden, deshalb for

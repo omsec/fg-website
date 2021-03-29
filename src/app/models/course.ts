@@ -1,3 +1,4 @@
+import { Lookup } from './lookup';
 import { MetaInfo } from './metainfo';
 
 export interface Course {
@@ -15,8 +16,7 @@ export interface Course {
   name: string;
   seriesCode: number;
   seriesText?: string;
-  carClassesCode: number[];
-  carClassesText?: string[];
+  carClassCodes?: Lookup[];
   description?: string;
   route?: CourseRef;
   tags?:[];

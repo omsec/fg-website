@@ -25,7 +25,7 @@ export class CourseFactory {
       name: '',
       seriesCode: lookupService.getDefault(LookupTypes.Series),
       //carClassesCode: Array.from([lookupService.getDefault(LookupTypes.CarClass)]) // setzt das erste elemente, wenn kein def vorhanden
-      carClassesCode: Array.from([]) // kein def
+      carClassCodes: Array.from([]) // kein def
     }
   }
 

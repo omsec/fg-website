@@ -78,8 +78,6 @@ export class CourseFormComponent implements OnInit, OnChanges {
     this.style = this.lookupService.getOptions(this.lookups, LookupTypes.CourseStyle, false);
     this.carClasses = this.lookupService.getOptions(this.lookups, LookupTypes.CarClass, false);
 
-    console.log(this.carClasses);
-
     // type-ahead
     this.routes$.asObservable().pipe(
       filter(search => (search.searchTerm == '' || search.searchTerm.length >= 3)),
@@ -119,6 +117,12 @@ export class CourseFormComponent implements OnInit, OnChanges {
 
   onSubmit(): void {
     this.submitted = true;
+
+    console.log('form invalid: ', this.form.invalid)
+    //console.log(this.frm.)
+
+    // form.invalid scheint unzuverlässig; evtl. die muss-felder "von hand" prüfen
+    // (wird nicht mehr gelöscht nach korrekturen)
 
     // Falls das Formular ungültig ist, abbrechen
     if (this.form.invalid) { return; }

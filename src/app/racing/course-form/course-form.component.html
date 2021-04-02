@@ -109,7 +109,7 @@
           [dropdown]="true"
           [ngClass]="{ 'ng-invalid ng-dirty': submitted && frm.name.errors }">
         </p-autoComplete>
-        <small *ngIf="submitted && frm.name.errors" class="p-invalid">Route Name is required</small>
+        <small *ngIf="submitted && frm.route.errors" class="p-invalid">Route Name is required</small>
       </div>
 
       <div class="p-field p-col-6 p-md-6">

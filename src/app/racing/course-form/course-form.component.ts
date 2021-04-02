@@ -118,12 +118,6 @@ export class CourseFormComponent implements OnInit, OnChanges {
   onSubmit(): void {
     this.submitted = true;
 
-    console.log('form invalid: ', this.form.invalid)
-    //console.log(this.frm.)
-
-    // form.invalid scheint unzuverlässig; evtl. die muss-felder "von hand" prüfen
-    // (wird nicht mehr gelöscht nach korrekturen)
-
     // Falls das Formular ungültig ist, abbrechen
     if (this.form.invalid) { return; }
 

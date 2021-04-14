@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Course } from 'src/app/models/course';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
-import { TrackingService } from 'src/app/services/tracking.service';
 import { environment } from '../../../environments/environment';
 import { CarClass } from '../../models/lookup-values';
 
@@ -30,7 +29,6 @@ export class CourseShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
-    private trackingService: TrackingService,
     private authenticationService: AuthenticationService
   ) { }
 
@@ -54,7 +52,7 @@ export class CourseShowComponent implements OnInit {
           errMsg => { this.errorMsg =  errMsg; } // in der Komponente nur Fehler anzeigen, nicht interpretieren
         );
         // call this independently from the main entity
-        this.trackingService.getVisits(this.courseId, environment.releaseDate).subscribe(
+        this.courseService.getVisits(this.courseId, environment.releaseDate).subscribe(
           res => { this.visits = res; },
           // just hide in case of an error
           () => { this.visits - 1}

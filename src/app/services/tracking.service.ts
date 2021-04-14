@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { retry, map, catchError, delay } from 'rxjs/operators';
+import { retry, map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { formatDate } from '../helpers/date-helper' // import einzelner funktion(en)
 import { TrackingRaw } from '../models/tracking-raw';
 import { Tracking } from '../models/tracking';
 import { TrackingFactory } from '../models/tracking-factory';
+
+// currently not used anymore, since the endpoints are not embedded to the
+// respective entities.
+// this service maybe later used for additional stat-apis
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +20,7 @@ export class TrackingService {
 
   constructor(private http: HttpClient) { }
 
+  /*
   getVisits(id: string, since: Date): Observable<number> {
 
     const sinceStr = formatDate(since);
@@ -41,6 +46,7 @@ export class TrackingService {
         })
       );
   }
+  */
 
   getVisitors(id: string, since: Date): Observable<Tracking[]> {
 

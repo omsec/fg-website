@@ -10,7 +10,12 @@ import { CourseListItemRaw, CourseRaw } from '../models/course-raw';
 import { CourseListItem, Course, CourseSearch, CourseSearchMode } from '../models/course';
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
 import { AuthenticationService } from './authentication.service';
-import { CarClass, CourseStyle, UserRole } from '../models/lookup-values';
+import { CarClass, UserRole } from '../models/lookup-values';
+import { TrackingRaw } from '../models/tracking-raw';
+import { Tracking } from '../models/tracking';
+import { TrackingFactory } from '../models/tracking-factory';
+
+import { formatDate } from '../helpers/date-helper' // import einzelner funktion(en)
 
 @Injectable({
   providedIn: 'root'
@@ -158,6 +163,32 @@ export class CourseService {
     }
 
     return { ...c}
+  }
+
+  getVisits(id: string, since: Date): Observable<number> {
+
+    const sinceStr = formatDate(since);
+    const params = new HttpParams({
+      fromObject: {
+        //id,
+        startDT: sinceStr
+      }
+    });
+
+    // console.log(sinceStr)
+
+    // may return {visits: INT} or API-Error
+    return this.http.get<any>(`${environment.apiUrl}/courses/public/${id}/visits`,  { params })
+      .pipe(
+        map(res => {
+          return res.visits
+        }),
+        catchError(error => {
+          // convert any error into "no information signal" (just hide the info in components)
+          console.log(error)
+          return of(-1)
+        })
+      );
   }
 
   // Test

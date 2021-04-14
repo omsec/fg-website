@@ -7,9 +7,9 @@
     <!--
     <div class="p-grid p-jc-center p-text-center">
       <div class="p-col-6">
-          <img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
-          <img class="rounded right" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track">
-          <img class="rounded right" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Standard Track"> ToDo: auf Iphones nicht mehr zentriert!
+          <img class="rounded" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Standard Track">
+          <img class="rounded right" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Standard Track">
+          <img class="rounded right" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Standard Track"> ToDo: auf Iphones nicht mehr zentriert!
       </div>
     </div>
     -->
@@ -20,9 +20,9 @@
       responsive
       p-col-* bezieht sich auf das kleinste Gerät (Handy) - dann Tablets, dann PC
       -->
-      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Game"></div>
-      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Series"></div>
-      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://placehold.it/50x50/DAF7A6" alt="Type" title="Style"></div>
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Game"></div>
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Series"></div>
+      <div class="p-col-3 p-md-2 p-lg-1"><img class="rounded" src="https://via.placeholder.com/50/DAF7A6" alt="Type" title="Style"></div>
     </div>
 
     <div class="p-grid p-jc-center p-text-center">
@@ -60,20 +60,21 @@
       </div>
       <div class="p-col-2 p-text-right">
         <!-- by convention/requirements, it's not undefined -->
-        <div *ngIf="course.carClassCodes![0].value==CARCLASS.Open; else manyCC">
-          <img class="rounded" src="assets/icons/carclass/cc_open.png" alt="Car Class" title="course.carClassCodes[0].text">
+        <!-- <div *ngIf="course.carClassCodes![0].value==CARCLASS.Open; else manyCC"> -->
+          <div *ngIf="!course.carClassCodes; else manyCC">
+          <img class="rounded" src="assets/icons/carclass/cc_open.png" alt="Car Class" title="open"> <!-- {{cc.text}} nur als Fix für alte Daten-->
         </div>
         <ng-template #manyCC>
           <div *ngFor="let cc of course.carClassCodes" class="box">
             <!-- ToDo: Falls ALLE kommt, anpassen (nur OPEN zeigen, IF...)-->
             <div [ngSwitch]="cc.value">
-              <img *ngSwitchCase="CARCLASS.A800" class="rounded" src="assets/icons/carclass/cc_a.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.B700" class="rounded" src="assets/icons/carclass/cc_b.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.C600" class="rounded" src="assets/icons/carclass/cc_c.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.D500" class="rounded" src="assets/icons/carclass/cc_d.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.S1900" class="rounded" src="assets/icons/carclass/cc_s1.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.S2998" class="rounded" src="assets/icons/carclass/cc_s2.png" alt="Car Class" title="cc.Text">
-              <img *ngSwitchCase="CARCLASS.X999" class="rounded" src="assets/icons/carclass/cc_x.png" alt="Car Class" title="cc.Text">
+              <img *ngSwitchCase="CARCLASS.A800" class="rounded" src="assets/icons/carclass/cc_a.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.B700" class="rounded" src="assets/icons/carclass/cc_b.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.C600" class="rounded" src="assets/icons/carclass/cc_c.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.D500" class="rounded" src="assets/icons/carclass/cc_d.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.S1900" class="rounded" src="assets/icons/carclass/cc_s1.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.S2998" class="rounded" src="assets/icons/carclass/cc_s2.png" alt="Car Class" title={{cc.text}}>
+              <img *ngSwitchCase="CARCLASS.X999" class="rounded" src="assets/icons/carclass/cc_x.png" alt="Car Class" title={{cc.text}}>
             </div>
           </div>
         </ng-template>

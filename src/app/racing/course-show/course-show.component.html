@@ -43,7 +43,7 @@
         <p><a [routerLink]="['/users/users', course.metaInfo.createdID]">{{ course.metaInfo.createdName }}</a></p>
       </div>
       <div class="p-col-6 p-text-right">
-        <p>Rating Component</p>
+        <fg-rating [rating]="course.metaInfo.rating"></fg-rating>
       </div>
     </div>
 

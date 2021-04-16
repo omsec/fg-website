@@ -28,13 +28,17 @@ import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TagModule } from 'primeng/tag';
+import { RatingComponent } from './rating/rating.component';
+import { DelayDirective } from './delay.directive';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
 @NgModule({
   declarations: [
     ForzasharePipe,
-    EnvPipe
+    EnvPipe,
+    RatingComponent,
+    DelayDirective
   ],
   imports: [
     CommonModule,
@@ -90,7 +94,10 @@ import { TagModule } from 'primeng/tag';
     TableModule,
     InputTextareaModule,
     FieldsetModule,
-    TagModule
+    TagModule,
+    // components
+    RatingComponent,
+    DelayDirective
   ]
 })
 export class AppSharedModule { }

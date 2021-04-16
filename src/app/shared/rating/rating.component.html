@@ -1,0 +1,15 @@
+<!-- https://google.github.io/material-design-icons/ -->
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div *ngIf="showImmediately; else showAnimatedTmplt">
+    <span *ngFor="let isEmpty of stars; index as idx" class="material-icons rating">
+      {{ isEmpty ? 'star_border': 'star_rate' }}
+    </span>
+</div>
+
+<ng-template #showAnimatedTmplt>
+    <span *ngFor="let isEmpty of stars; index as idx" class="material-icons rating">
+      <p *fgDelay="500 + idx * 200"> {{ isEmpty ? 'star_border': 'star_rate' }} </p>
+    </span>
+</ng-template>

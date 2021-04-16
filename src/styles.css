@@ -23,6 +23,15 @@ html, body {
   font-weight: bold;
 }
 
+.rating {
+  color: darkred;
+ }
+
+ .user {
+   color: cornflowerblue;
+   font-style: italic;
+ }
+
 
 /* https://www.w3schools.com/css/css3_borders.asp */
 .rounded {

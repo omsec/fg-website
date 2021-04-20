@@ -30,6 +30,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TagModule } from 'primeng/tag';
 import { RatingComponent } from './rating/rating.component';
 import { DelayDirective } from './delay.directive';
+import { VotingComponent } from './voting/voting.component';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
@@ -38,7 +39,8 @@ import { DelayDirective } from './delay.directive';
     ForzasharePipe,
     EnvPipe,
     RatingComponent,
-    DelayDirective
+    DelayDirective,
+    VotingComponent
   ],
   imports: [
     CommonModule,
@@ -97,7 +99,8 @@ import { DelayDirective } from './delay.directive';
     TagModule,
     // components
     RatingComponent,
-    DelayDirective
+    DelayDirective,
+    VotingComponent
   ]
 })
 export class AppSharedModule { }

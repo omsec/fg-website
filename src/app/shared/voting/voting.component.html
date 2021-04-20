@@ -1,0 +1,37 @@
+<!--
+<div class="p-d-flex p-jc-center">
+  <div class="p-mr-2">Item 1</div>
+  <div>Item 2</div>
+</div>
+-->
+
+<ng-container *ngIf="profileVotes$ | async as votes; else loading">
+  <div class="p-grid">
+    <div class="p-col-fixed">
+      <div [ngSwitch]=votes.userVote class="box">
+        <img *ngSwitchCase="VOTE_ACTION.negative" src="assets/icons/rating/down-red.png" height="30" alt="revoke vote" (click)="registerVote(VOTE_ACTION.notVoted)">
+        <img *ngSwitchDefault src="assets/icons/rating/down-gray.png" height="30" alt="down vote" (click)="registerVote(VOTE_ACTION.negative)">
+      </div>
+    </div>
+    <div class="p-col-fixed">
+      <div [ngSwitch]=votes.userVote class="box">
+        <img *ngSwitchCase="VOTE_ACTION.positive" src="assets/icons/rating/up-green.png" height="30" alt="revoke vote" (click)="registerVote(VOTE_ACTION.notVoted)">
+        <img *ngSwitchDefault src="assets/icons/rating/up-gray.png" height="30" alt="up vote" (click)="registerVote(VOTE_ACTION.positive)">
+      </div>
+    </div>
+  </div>
+  <div class="p-grid">
+    <div class="p-col-fixed">
+      <div class="box">{{votes.downVotes}}</div>
+    </div>
+    <div class="p-col-fixed">
+      <div class="box">{{votes.upVotes}}</div>
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-template #loading>
+  <!-- global css class-->
+  <p-progressSpinner [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+</ng-template>

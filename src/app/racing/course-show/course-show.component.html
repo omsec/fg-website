@@ -108,6 +108,12 @@
       </div>
     </div>
 
+    <div class="p-grid p-jc-end">
+      <div class="p-col-12">
+        <fg-voting domain="course" profileId={{course.id}}></fg-voting>
+      </div>
+    </div>
+
     <div *ngIf="canModify" class="p-grid">
       <div class="p-col-12">
         <p-fieldset legend="Control Panel" [toggleable]="true">

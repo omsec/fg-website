@@ -3,7 +3,7 @@ import { Observable, of, Subject } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 
-import { Domain } from '../../shared/domain'
+import { BusinessDomain } from '../business-domain'
 import { ProfileVotes, Vote, VoteAction } from 'src/app/models/voting';
 import { VotingService } from 'src/app/services/voting.service';
 import { catchError, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   providers: [MessageService]
 })
 export class VotingComponent implements OnInit {
-  @Input() domain = '';
+  @Input() domain = BusinessDomain.course
   @Input() profileId = '';
 
   // "const" für's Template
@@ -25,8 +25,9 @@ export class VotingComponent implements OnInit {
   profileVotes$: Observable<ProfileVotes> | undefined;
   errorMsg = '';
 
-  msgShown = false;
+  msgShown = false; // used for not-logged-in msg
 
+  // returned in case of an error
   noData: ProfileVotes = {
     upVotes: 0,
     downVotes: 0,
@@ -40,8 +41,6 @@ export class VotingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //this.profileVotes$ = this.votingService.getVotes(this.domain, this.profileId);
-
     this.profileVotes$ = this.votingService.getVotes(this.domain, this.profileId)
       .pipe(
         catchError(err => {
@@ -53,6 +52,7 @@ export class VotingComponent implements OnInit {
 
   showNotLoggedInMsg() {
     if (this.msgShown == true) { return }
+
     this.messageService.add({severity:'info', summary:'Log-in', detail:'Become a member to vote & comment'});
     this.msgShown = true;
   }
@@ -72,14 +72,14 @@ export class VotingComponent implements OnInit {
       vote: voteAction
     }
 
-    // ToDO: obj type
+    // API returns [profilesVotes] as well, so another call is not needed
     this.profileVotes$ = this.votingService.castVote(this.domain, vote)
     .pipe(
       catchError(err => {
         this.errorMsg = err;
         return of(this.noData)
       })
-  );
+    );
   }
 
 }

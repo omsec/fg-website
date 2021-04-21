@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Course } from 'src/app/models/course';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { CourseService } from 'src/app/services/course.service';
+import { BusinessDomain } from 'src/app/shared/business-domain';
 import { environment } from '../../../environments/environment';
 import { CarClass } from '../../models/lookup-values';
 
@@ -23,8 +24,9 @@ export class CourseShowComponent implements OnInit {
   // rechte-steuerung soll aber möglichst über den Service erfolgen (canMody, showControl panel etc.)
   currentUserId = '';
 
-  // look-up symbols used in template
-  CARCLASS = CarClass
+  // symbols used in template (const)
+  bDomain = BusinessDomain.course;
+  CARCLASS = CarClass;
 
   constructor(
     private route: ActivatedRoute,

@@ -6,7 +6,7 @@ import { retry, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { AuthenticationService } from './authentication.service';
 import { ProfileVotes, Vote } from '../models/voting';
-import { Domain } from '../shared/domain'
+import { BusinessDomain } from '../shared/business-domain'
 
 
 @Injectable({
@@ -20,7 +20,7 @@ export class VotingService {
   ) { }
 
   // TodO: Object Type abstrahieren
-  getVotes(domain: string, id: string): Observable<ProfileVotes> {
+  getVotes(domain: BusinessDomain, id: string): Observable<ProfileVotes> {
 
     let url = domain + 's/';
 
@@ -43,7 +43,7 @@ export class VotingService {
   }
 
   // ToDO: Object Type abstrahieren
-  castVote(domain: string, vote: Vote): Observable<ProfileVotes> {
+  castVote(domain: BusinessDomain, vote: Vote): Observable<ProfileVotes> {
     return this.http.post<ProfileVotes>(
       `${environment.apiUrl}/` + domain + '/vote', vote).pipe(
         catchError(this.errorHandler))

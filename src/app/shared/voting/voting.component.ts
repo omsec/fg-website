@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 
+import { Message } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+
 import { Domain } from '../../shared/domain'
 import { ProfileVotes, Vote, VoteAction } from 'src/app/models/voting';
 import { VotingService } from 'src/app/services/voting.service';
@@ -10,7 +13,8 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 @Component({
   selector: 'fg-voting',
   templateUrl: './voting.component.html',
-  styleUrls: ['./voting.component.css']
+  styleUrls: ['./voting.component.css'],
+  providers: [MessageService]
 })
 export class VotingComponent implements OnInit {
   @Input() domain = '';
@@ -23,9 +27,12 @@ export class VotingComponent implements OnInit {
   errorMsg = '';
   vote$ = new Subject<boolean>();
 
+  msgShown = false;
+
   constructor(
     private votingService: VotingService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -51,9 +58,20 @@ export class VotingComponent implements OnInit {
 
   }
 
+  showNotLoggedInMsg() {
+    if (this.msgShown == true) { return }
+    this.messageService.add({severity:'info', summary:'Service Message', detail:'Via MessageService'});
+    this.msgShown = true;
+  }
+
   registerVote(voteAction: VoteAction): void {
 
     // show info if not logged-in
+    if (this.authenticationService.currentUserValue.id == '') {
+      console.log('not logged in')
+      this.showNotLoggedInMsg()
+      return
+    }
 
     // send vote & reload
     let vote: Vote = {

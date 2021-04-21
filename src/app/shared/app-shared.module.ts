@@ -14,6 +14,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AvatarModule } from 'primeng/avatar';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { PasswordModule } from 'primeng/password';
@@ -54,6 +55,7 @@ import { VotingComponent } from './voting/voting.component';
     AvatarModule,
     DropdownModule,
     InputNumberModule,
+    MessagesModule,
     MessageModule,
     DynamicDialogModule,
     PasswordModule,
@@ -83,6 +85,7 @@ import { VotingComponent } from './voting/voting.component';
     AvatarModule,
     DropdownModule,
     InputNumberModule,
+    MessagesModule,
     MessageModule,
     DynamicDialogModule,
     PasswordModule,

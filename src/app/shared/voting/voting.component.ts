@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 
-import { Message } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
 import { Domain } from '../../shared/domain'
@@ -25,9 +24,14 @@ export class VotingComponent implements OnInit {
 
   profileVotes$: Observable<ProfileVotes> | undefined;
   errorMsg = '';
-  vote$ = new Subject<boolean>();
 
   msgShown = false;
+
+  noData: ProfileVotes = {
+    upVotes: 0,
+    downVotes: 0,
+    userVote: VoteAction.notVoted
+  };
 
   constructor(
     private votingService: VotingService,
@@ -38,29 +42,18 @@ export class VotingComponent implements OnInit {
   ngOnInit(): void {
     //this.profileVotes$ = this.votingService.getVotes(this.domain, this.profileId);
 
-    const noData: ProfileVotes = {
-      upVotes: 0,
-      downVotes: 0,
-      userVote: VoteAction.notVoted
-    };
-
-    this.profileVotes$ = this.vote$.pipe(
-      startWith(true),
-      switchMap(() => {
-        return this.votingService.getVotes(this.domain, this.profileId).pipe(
-          catchError((err) => {
-            console.log(err);
-            this.errorMsg = err;
-            return of(noData)
-          }));
-      })
+    this.profileVotes$ = this.votingService.getVotes(this.domain, this.profileId)
+      .pipe(
+        catchError(err => {
+          this.errorMsg = err;
+          return of(this.noData)
+        })
     );
-
   }
 
   showNotLoggedInMsg() {
     if (this.msgShown == true) { return }
-    this.messageService.add({severity:'info', summary:'Service Message', detail:'Via MessageService'});
+    this.messageService.add({severity:'info', summary:'Log-in', detail:'Become a member to vote & comment'});
     this.msgShown = true;
   }
 
@@ -68,7 +61,6 @@ export class VotingComponent implements OnInit {
 
     // show info if not logged-in
     if (this.authenticationService.currentUserValue.id == '') {
-      console.log('not logged in')
       this.showNotLoggedInMsg()
       return
     }
@@ -81,13 +73,13 @@ export class VotingComponent implements OnInit {
     }
 
     // ToDO: obj type
-    this.votingService.castVote('course', vote).subscribe(() => {
-      this.vote$.next(true)
-    }),
-    catchError(err => {
-      this.errorMsg = err;
-      return of(null)
-    })
+    this.profileVotes$ = this.votingService.castVote(this.domain, vote)
+    .pipe(
+      catchError(err => {
+        this.errorMsg = err;
+        return of(this.noData)
+      })
+  );
   }
 
 }

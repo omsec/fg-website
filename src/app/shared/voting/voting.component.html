@@ -8,25 +8,25 @@
 <ng-container *ngIf="profileVotes$ | async as votes; else loading">
 
   <ng-container *ngIf="errorMsg==''">
-    <div class="p-grid">
-      <div class="p-col-fixed">
+    <div class="p-grid p-jc-end">
+      <div class="p-col-2 p-md-1 p-lg-1 p-text-right">
         <div [ngSwitch]=votes.userVote class="box">
           <img *ngSwitchCase="VOTE_ACTION.negative" src="assets/icons/rating/down-red.png" height="30" alt="revoke vote" (click)="registerVote(VOTE_ACTION.notVoted)">
           <img *ngSwitchDefault src="assets/icons/rating/down-gray.png" height="30" alt="down vote" (click)="registerVote(VOTE_ACTION.negative)">
         </div>
       </div>
-      <div class="p-col-fixed">
+      <div class="p-col-2 p-md-1 p-lg-1 p-text-right">
         <div [ngSwitch]=votes.userVote class="box">
           <img *ngSwitchCase="VOTE_ACTION.positive" src="assets/icons/rating/up-green.png" height="30" alt="revoke vote" (click)="registerVote(VOTE_ACTION.notVoted)">
           <img *ngSwitchDefault src="assets/icons/rating/up-gray.png" height="30" alt="up vote" (click)="registerVote(VOTE_ACTION.positive)">
         </div>
       </div>
     </div>
-    <div class="p-grid">
-      <div class="p-col-fixed">
+    <div class="p-grid p-1 p-jc-end">
+      <div class="p-col-2 p-md-1 p-lg-1 p-text-right">
         <div class="box">{{votes.downVotes}}</div>
       </div>
-      <div class="p-col-fixed">
+      <div class="p-col-2 p-md-1 p-lg-1 p-text-right">
         <div class="box">{{votes.upVotes}}</div>
       </div>
     </div>

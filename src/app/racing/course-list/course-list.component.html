@@ -25,7 +25,7 @@
             type="text" pInputText
             (keyup)="searchHandler()">
         </div>
-        <div class="p-field p-col-11 p-md-1">
+        <div class="p-field p-col-3 p-md-1 p-lg-1">
           <!-- todo: unten/rechts vom searchTerm platzieren, neues div/formgrid?-->
           <p-button
             type="button"
@@ -46,8 +46,7 @@
       [value]="courses"
       [paginator]="true"
       [rows]="10"
-      [totalRecords]="courses.length"
-      >
+      [totalRecords]="courses.length">
       <ng-template pTemplate="header">
         <tr>
             <th>Series</th>

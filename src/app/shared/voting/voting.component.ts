@@ -68,6 +68,7 @@ export class VotingComponent implements OnInit {
     // send vote & reload
     let vote: Vote = {
       profileID: this.profileId,
+      profileType: this.domain,
       userID: this.authenticationService.currentUserValue.id,
       vote: voteAction
     }

@@ -44,6 +44,7 @@ export class VotingService {
 
   // ToDO: Object Type abstrahieren
   castVote(domain: BusinessDomain, vote: Vote): Observable<ProfileVotes> {
+    vote.profileType = domain;
     return this.http.post<ProfileVotes>(
       `${environment.apiUrl}/` + domain + '/vote', vote).pipe(
         catchError(this.errorHandler))

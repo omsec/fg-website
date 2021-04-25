@@ -1,3 +1,5 @@
+import { BusinessDomain } from '../shared/business-domain';
+
 export enum VoteAction {
   notVoted = 0,
   negative = -1,
@@ -7,6 +9,7 @@ export enum VoteAction {
 // represents a vote action
 export interface Vote {
   profileID: string;
+  profileType: BusinessDomain;
   userID: string;
   userName?: string;
   voteTS?: Date;

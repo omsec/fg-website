@@ -6,6 +6,9 @@ export interface MetaInfo {
   modifiedID?: string;
   modifiedName?: string;
   rating?: number;
+  ratingSort?: number;
+  upVotes: number;
+  downVotes: number;
   touchedTS?: Date;
   recVer?: number;
 }

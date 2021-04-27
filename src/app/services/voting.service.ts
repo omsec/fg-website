@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { AuthenticationService } from './authentication.service';
-import { ProfileVotes, Vote } from '../models/voting';
+import { ProfileVotes, Vote, VoteAction } from '../models/voting';
 import { BusinessDomain } from '../shared/business-domain'
 
 
@@ -15,11 +14,34 @@ import { BusinessDomain } from '../shared/business-domain'
 export class VotingService {
 
   constructor(
-    private http: HttpClient,
-    private authenticationService: AuthenticationService
+    private http: HttpClient
   ) { }
 
-  // TodO: Object Type abstrahieren
+  // get a user's vote on a given profile
+  getUserVote(profileId: string): Observable<VoteAction> {
+
+    const params = new HttpParams({
+      fromObject: {
+        pId: profileId
+      }
+    });
+
+    // type: {vote: num}
+    return this.http.get<any>(
+      //`${environment.apiUrl}/courses/${courseId}`)
+      `${environment.apiUrl}/user/vote`,  { params })
+      .pipe(
+        // delay(1000), // testing loading/error in template :-)
+        // there will always be a result, even if there are no votes yet
+        map(res => { console.log(res); return res.vote}),
+        retry(1),
+        catchError(this.errorHandler)
+      );
+
+  }
+
+  // wird nicht mehr gebraucht; neu über den Parent gelesen
+  /*
   getVotes(domain: BusinessDomain, id: string): Observable<ProfileVotes> {
 
     let url = domain + 's/';
@@ -41,12 +63,11 @@ export class VotingService {
         catchError(this.errorHandler)
       );
   }
+  */
 
-  // ToDO: Object Type abstrahieren
-  castVote(domain: BusinessDomain, vote: Vote): Observable<ProfileVotes> {
-    vote.profileType = domain;
+  castVote(vote: Vote): Observable<ProfileVotes> {
     return this.http.post<ProfileVotes>(
-      `${environment.apiUrl}/` + domain + '/vote', vote).pipe(
+      `${environment.apiUrl}/` + vote.profileType + '/vote', vote).pipe(
         catchError(this.errorHandler))
   }
 

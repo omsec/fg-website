@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { BusinessDomain } from '../business-domain'
 import { ProfileVotes, Vote, VoteAction } from 'src/app/models/voting';
 import { VotingService } from 'src/app/services/voting.service';
-import { catchError, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
@@ -16,8 +16,11 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   providers: [MessageService]
 })
 export class VotingComponent implements OnInit {
-  @Input() domain = BusinessDomain.course
+  @Input() domain = BusinessDomain.course;
   @Input() profileId = '';
+  // number geht aus irgendeinem grund nicht - wirft im template vom parent fehler
+  @Input() upVotes = '0';
+  @Input() downVotes = '0';
 
   // "const" für's Template
   VOTE_ACTION = VoteAction;
@@ -41,6 +44,37 @@ export class VotingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    if (this.authenticationService.currentUserValue.id != '') {
+      this.profileVotes$ = this.votingService.getUserVote(this.profileId)
+      .pipe(
+        map(uv => {
+          let pv: ProfileVotes = {
+            upVotes: +this.upVotes,
+            downVotes: +this.downVotes,
+            userVote: uv
+          }
+          // console.log(pv);
+          return (pv);
+        }),
+        catchError(err => {
+          this.errorMsg = err;
+          return of(this.noData)
+        })
+      );
+    } else {
+      // no user logged-in
+      let pv: ProfileVotes = {
+        upVotes: +this.upVotes,
+        downVotes: +this.downVotes,
+        userVote: VoteAction.notVoted
+      }
+      this.profileVotes$ = of(pv);
+    }
+
+
+
+    /*
     this.profileVotes$ = this.votingService.getVotes(this.domain, this.profileId)
       .pipe(
         catchError(err => {
@@ -48,6 +82,7 @@ export class VotingComponent implements OnInit {
           return of(this.noData)
         })
     );
+    */
   }
 
   showNotLoggedInMsg() {
@@ -74,7 +109,7 @@ export class VotingComponent implements OnInit {
     }
 
     // API returns [profilesVotes] as well, so another call is not needed
-    this.profileVotes$ = this.votingService.castVote(this.domain, vote)
+    this.profileVotes$ = this.votingService.castVote(vote)
     .pipe(
       catchError(err => {
         this.errorMsg = err;

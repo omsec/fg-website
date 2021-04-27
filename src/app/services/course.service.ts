@@ -11,9 +11,6 @@ import { CourseListItem, Course, CourseSearch, CourseSearchMode } from '../model
 import { CourseListItemFactory, CourseFactory } from '../models/course-factory';
 import { AuthenticationService } from './authentication.service';
 import { CarClass, UserRole } from '../models/lookup-values';
-import { TrackingRaw } from '../models/tracking-raw';
-import { Tracking } from '../models/tracking';
-import { TrackingFactory } from '../models/tracking-factory';
 
 import { formatDate } from '../helpers/date-helper' // import einzelner funktion(en)
 

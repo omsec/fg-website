@@ -6,6 +6,9 @@ export interface MetaInfoRaw {
   modifiedID?: string;
   modifiedName?: string;
   rating: number;
+  ratingSort: number;
+  upVotes: number;
+  downVotes: number;
   touchedTS: string;
   recVer: number;
 }

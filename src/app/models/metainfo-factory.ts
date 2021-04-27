@@ -18,7 +18,9 @@ export class MetainfoFactory {
     return {
       createdTS: undefined,
       createdID: '', // id würde eigentlich reichen
-      createdName: ''
+      createdName: '',
+      upVotes: 0,
+      downVotes: 0
     }
   }
 

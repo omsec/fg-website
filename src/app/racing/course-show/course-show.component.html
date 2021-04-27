@@ -110,7 +110,12 @@
 
     <div class="p-grid p-jc-end">
       <div class="p-col-12">
-        <fg-voting [domain]="bDomain" profileId={{course.id}}></fg-voting>
+        <fg-voting
+          [domain]="bDomain"
+          profileId="{{course.id}}"
+          upVotes="{{course.metaInfo.upVotes}}"
+          downVotes="{{course.metaInfo.downVotes}}">
+        </fg-voting>
       </div>
     </div>
 

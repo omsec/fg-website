@@ -8,6 +8,7 @@ export interface MetaInfo {
   rating?: number;
   ratingSort?: number;
   upVotes: number;
+  userVote: number;
   downVotes: number;
   touchedTS?: Date;
   recVer?: number;

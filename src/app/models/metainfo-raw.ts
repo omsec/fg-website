@@ -8,6 +8,7 @@ export interface MetaInfoRaw {
   rating: number;
   ratingSort: number;
   upVotes: number;
+  userVote: number;
   downVotes: number;
   touchedTS: string;
   recVer: number;

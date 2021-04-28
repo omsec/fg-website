@@ -21,6 +21,7 @@ export class VotingComponent implements OnInit {
   // number geht aus irgendeinem grund nicht - wirft im template vom parent fehler
   @Input() upVotes = '0';
   @Input() downVotes = '0';
+  @Input() userVote = '0';
 
   // "const" für's Template
   VOTE_ACTION = VoteAction;
@@ -45,6 +46,24 @@ export class VotingComponent implements OnInit {
 
   ngOnInit(): void {
 
+    if (this.authenticationService.currentUserValue.id != '') {
+      let pv: ProfileVotes = {
+        upVotes: +this.upVotes,
+        downVotes: +this.downVotes,
+        userVote: +this.userVote
+      }
+      this.profileVotes$ = of(pv);
+    } else {
+      let pv: ProfileVotes = {
+        upVotes: +this.upVotes,
+        downVotes: +this.downVotes,
+        userVote: VoteAction.notVoted
+      }
+      this.profileVotes$ = of(pv);
+    }
+
+    // alte lösung mit eigenen service - neu über parent/input
+    /*
     if (this.authenticationService.currentUserValue.id != '') {
       this.profileVotes$ = this.votingService.getUserVote(this.profileId)
       .pipe(
@@ -71,7 +90,7 @@ export class VotingComponent implements OnInit {
       }
       this.profileVotes$ = of(pv);
     }
-
+    */
 
 
     /*

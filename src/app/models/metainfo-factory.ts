@@ -20,7 +20,8 @@ export class MetainfoFactory {
       createdID: '', // id würde eigentlich reichen
       createdName: '',
       upVotes: 0,
-      downVotes: 0
+      downVotes: 0,
+      userVote: 0
     }
   }
 

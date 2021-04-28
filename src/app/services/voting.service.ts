@@ -17,7 +17,9 @@ export class VotingService {
     private http: HttpClient
   ) { }
 
+  // wird nicht mehr gebraucht; neu über den Parent gelesen
   // get a user's vote on a given profile
+  /*
   getUserVote(profileId: string): Observable<VoteAction> {
 
     const params = new HttpParams({
@@ -39,6 +41,7 @@ export class VotingService {
       );
 
   }
+  */
 
   // wird nicht mehr gebraucht; neu über den Parent gelesen
   /*
@@ -67,7 +70,7 @@ export class VotingService {
 
   castVote(vote: Vote): Observable<ProfileVotes> {
     return this.http.post<ProfileVotes>(
-      `${environment.apiUrl}/` + vote.profileType + '/vote', vote).pipe(
+      `${environment.apiUrl}/vote`, vote).pipe(
         catchError(this.errorHandler))
   }
 

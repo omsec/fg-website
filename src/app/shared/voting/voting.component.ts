@@ -16,7 +16,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   providers: [MessageService]
 })
 export class VotingComponent implements OnInit {
-  @Input() domain = BusinessDomain.course;
+  @Input() domain = '' // BusinessDomain.course;
   @Input() profileId = '';
   // number geht aus irgendeinem grund nicht - wirft im template vom parent fehler
   @Input() upVotes = '0';

@@ -1,0 +1,98 @@
+<!-- always show editor for a new comment  or login info -->
+<!-- check for current user -->
+<fg-comment-create
+  profileId={{profileId}}
+  profileType={{profileType}}
+  (commentAdded)="onCommentAdded($event)">
+</fg-comment-create>
+<hr>
+
+<ng-container *ngIf="comments$ | async as cmts; else loading">
+
+  <ng-container *ngIf="errorMsg==''">
+
+    <div *ngFor="let cmt of cmts">
+
+      <div class="p-grid">
+        <div class="p-col-1">
+          <p-avatar icon="pi pi-user" size="large"></p-avatar>
+        </div>
+        <div class="p-col-11">
+          <div class="p-grid">
+            <div class="p-col-12">
+              <b>{{cmt.createdName}}</b>
+            </div>
+            <div class="p-col-12">
+              {{cmt.comment}}
+              <button
+                pButton
+                label="reply"
+                [disabled]=readOnly
+                style="height: 10%;"
+                (click)="toggleEditor(cmt.id)">
+              </button>
+              <fg-comment-create
+                  *ngIf="reply&&(replyId==cmt.id)"
+                  profileId={{cmt.id}}
+                  profileType={{profileType}}
+                  [isReply]="true"
+                  (commentAdded)="onCommentAdded($event)">
+              </fg-comment-create>
+            </div>
+            <div class="p-col-12">
+              <fg-voting
+                domain="comment"
+                profileId="{{cmt.id}}"
+                upVotes="{{cmt.upVotes}}"
+                downVotes="{{cmt.downVotes}}"
+                userVote="{{cmt.userVote}}">
+              </fg-voting>
+            </div>
+            <!-- answers -->
+            <div *ngIf="cmt.replies" class="p-col-12">
+              <div *ngFor="let rep of cmt.replies">
+
+                <div class="p-grid">
+                  <div class="p-col-1">
+                    <p-avatar icon="pi pi-user" size="large"></p-avatar>
+                  </div>
+                  <div class="p-col-11">
+                    <div class="p-grid">
+                      <div class="p-col-12">
+                        <b>{{rep.createdName}}</b>
+                      </div>
+                      <div class="p-col-12">
+                        {{rep.comment}}
+                      </div>
+                      <div class="p-col-12">
+                        <fg-voting
+                          domain="comment"
+                          profileId="{{rep.id}}"
+                          upVotes="{{rep.upVotes}}"
+                          downVotes="{{rep.downVotes}}"
+                          userVote="{{rep.userVote}}">
+                        </fg-voting>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <!-- hier wird alles als error behandelt, auch 204-->
+  <p *ngIf="errorMsg!=''">{{ errorMsg }}</p>
+
+</ng-container>
+
+<ng-template #loading>
+  <!-- global css class-->
+  <p-progressSpinner class="content" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+</ng-template>

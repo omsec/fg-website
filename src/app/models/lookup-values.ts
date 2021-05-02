@@ -5,6 +5,7 @@ export enum LookupTypes {
   UserLanguage = 'user language',
   Game = 'game',
   Visibility = 'visibility',
+  CommentStatus = 'comment status',
   CourseType = 'course type',
   CourseStyle = 'course style',
   Series = 'series',
@@ -38,6 +39,13 @@ export enum Visibility {
   Public,
   Friends,
   Me
+}
+
+export enum CommentStatus {
+  Pending,
+  Visible,
+  Flagged,
+  Blocked
 }
 
 export enum CourseType {

@@ -9,7 +9,7 @@ export enum VoteAction {
 // represents a vote action
 export interface Vote {
   profileID: string;
-  profileType: BusinessDomain;
+  profileType: string; //BusinessDomain;
   userID: string;
   userName?: string;
   voteTS?: Date;

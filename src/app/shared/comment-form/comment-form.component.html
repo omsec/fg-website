@@ -1,0 +1,24 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="p-grid p-jc-center">
+    <div class="p-col-12">
+      <!-- https://stackoverflow.com/questions/17209855/how-to-expand-textarea-width-to-100-of-parent-or-how-to-expand-any-html-elemen -->
+      <textarea
+        pInputTextarea
+        formControlName="comment"
+        placeholder="tell us what you think..."
+        [rows]="3"
+        [cols]="30"
+        [autoResize]=true
+        style="width: 100%; max-width: 100%;">
+      </textarea>
+    </div>
+    <div class="p-col-12">
+      <button
+        pButton
+        label="send"
+        [disabled]="!frm.comment.value"
+        style="height: 75%;">
+      </button>
+    </div>
+  </div>
+</form>

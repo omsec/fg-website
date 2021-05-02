@@ -29,9 +29,15 @@ import { TableModule } from 'primeng/table';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TagModule } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
+
 import { RatingComponent } from './rating/rating.component';
 import { DelayDirective } from './delay.directive';
 import { VotingComponent } from './voting/voting.component';
+import { CommentingComponent } from './commenting/commenting.component';
+import { CommentFormComponent } from './comment-form/comment-form.component';
+import { CommentCreateComponent } from './comment-create/comment-create.component';
+import { CommentEditComponent } from './comment-edit/comment-edit.component';
 
 // ToDo: mit Variablen gemäss Buch (Kap Modules) - achtung Pipes nicht in imports
 
@@ -41,7 +47,11 @@ import { VotingComponent } from './voting/voting.component';
     EnvPipe,
     RatingComponent,
     DelayDirective,
-    VotingComponent
+    VotingComponent,
+    CommentingComponent,
+    CommentFormComponent,
+    CommentCreateComponent,
+    CommentEditComponent
   ],
   imports: [
     CommonModule,
@@ -69,7 +79,8 @@ import { VotingComponent } from './voting/voting.component';
     TableModule,
     InputTextareaModule,
     FieldsetModule,
-    TagModule
+    TagModule,
+    CardModule
   ],
   exports: [
     CommonModule,
@@ -100,10 +111,12 @@ import { VotingComponent } from './voting/voting.component';
     InputTextareaModule,
     FieldsetModule,
     TagModule,
-    // components
+    CardModule,
+    // components - manuell exportiert
     RatingComponent,
     DelayDirective,
-    VotingComponent
+    VotingComponent,
+    CommentingComponent
   ]
 })
 export class AppSharedModule { }

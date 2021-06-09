@@ -1,5 +1,29 @@
 <ng-container *ngIf="user$ | async as usr; else loading">
   <h1>{{usr.loginName}}</h1>
+
+  <!-- ToDo: avatar -->
+  <!-- <img src={{usr.profilePicture}}> -->
+
+  <!-- angular service setzt das def pic -->
+<p-avatar
+  image="{{usr.profilePicture}}"
+  shape="circle"
+  size="xlarge">
+</p-avatar>
+<hr>
+
+<!-- https://stackoverflow.com/questions/42169747/add-additional-information-to-the-primeng-fileupload-data-transfer -->
+<p-fileUpload
+  mode="basic"
+  name="file"
+  url="{{uploadUrl}}"
+  accept="image/*"
+  [maxFileSize]=1000000
+  [auto]="true">
+</p-fileUpload>
+
+<!-- ToDo: Refresh Proc after upload-->
+
 <!-- hier wird alles als error behandelt, auch 204-->
  <p *ngIf="errorMsg!=''">{{errorMsg}}</p>
 

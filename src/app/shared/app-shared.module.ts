@@ -30,6 +30,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
+import { FileUploadModule } from 'primeng/fileupload';
 
 import { RatingComponent } from './rating/rating.component';
 import { DelayDirective } from './delay.directive';
@@ -80,7 +81,8 @@ import { CommentEditComponent } from './comment-edit/comment-edit.component';
     InputTextareaModule,
     FieldsetModule,
     TagModule,
-    CardModule
+    CardModule,
+    FileUploadModule
   ],
   exports: [
     CommonModule,
@@ -116,7 +118,8 @@ import { CommentEditComponent } from './comment-edit/comment-edit.component';
     RatingComponent,
     DelayDirective,
     VotingComponent,
-    CommentingComponent
+    CommentingComponent,
+    FileUploadModule
   ]
 })
 export class AppSharedModule { }

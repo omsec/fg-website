@@ -25,6 +25,10 @@ export class UserService {
           map(userRaw => {
             // check for empty result, record not found (204)
             if (userRaw) {
+              // display default image if no user avatar is available
+              if (!userRaw.profilePicture) {
+                userRaw.profilePicture = 'assets/images/default-user.png'
+              }
               return UserFactory.fromRaw(userRaw);
             } else {
               throw 'null received' // convert 204 into an error (and handle "normally" with the catcher)

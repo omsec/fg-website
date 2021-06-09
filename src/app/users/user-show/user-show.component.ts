@@ -7,6 +7,8 @@ import { User } from '../../models/user';
 import { UserFactory } from '../../models/user-factory';
 import { UserService } from '../../services/user.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'fg-user-show',
   templateUrl: './user-show.component.html',
@@ -16,6 +18,8 @@ export class UserShowComponent implements OnInit {
   // userId = '';
   user$: Observable<User> | undefined;
   errorMsg = '';
+
+  uploadUrl = `${environment.apiUrl}/user/uploadAvatar`
 
 
   // TODO:
